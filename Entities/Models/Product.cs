@@ -12,6 +12,7 @@ namespace Entities.Models
             PackageProduct = new HashSet<PackageProduct>();
             ProductCatProductParameters = new HashSet<ProductCatProductParameters>();
             ProductColor = new HashSet<ProductColor>();
+            ProductComission = new HashSet<ProductComission>();
             ProductCustomerRate = new HashSet<ProductCustomerRate>();
             ProductImage = new HashSet<ProductImage>();
             ProductLanguage = new HashSet<ProductLanguage>();
@@ -74,6 +75,7 @@ namespace Entities.Models
         public virtual ICollection<PackageProduct> PackageProduct { get; set; }
         public virtual ICollection<ProductCatProductParameters> ProductCatProductParameters { get; set; }
         public virtual ICollection<ProductColor> ProductColor { get; set; }
+        public virtual ICollection<ProductComission> ProductComission { get; set; }
         public virtual ICollection<ProductCustomerRate> ProductCustomerRate { get; set; }
         public virtual ICollection<ProductImage> ProductImage { get; set; }
         public virtual ICollection<ProductLanguage> ProductLanguage { get; set; }

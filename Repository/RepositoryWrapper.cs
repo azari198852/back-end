@@ -9,7 +9,7 @@ namespace Repository
 {
     public class RepositoryWrapper : IRepositoryWrapper
     {
-        private BaseContext _repoContext;
+        private readonly BaseContext _repoContext;
         public IApiRepository _api;
         public ICatApiRepository _catApi;
         public ICatFromRepository _catFrom;
@@ -67,6 +67,8 @@ namespace Repository
         private ISellerAddressRepository _sellerAddress;
         private IProductOfferRepository _productOffer;
         private ISellerCatProductRepository _sellerCatProduct;
+        private IProductComissionRepository _productComission;
+        private IComissionRepository _comission;
 
 
         public IApiRepository Api => _api ??= new ApiRepository(_repoContext);
@@ -127,6 +129,8 @@ namespace Repository
         public ISellerAddressRepository SellerAddress => _sellerAddress ??= new SellerAddressRepository(_repoContext);
         public IProductOfferRepository ProductOffer => _productOffer ??= new ProductOfferRepository(_repoContext);
         public ISellerCatProductRepository SellerCatProduct => _sellerCatProduct ??= new SellerCatProductRepository(_repoContext);
+        public IProductComissionRepository ProductComission => _productComission ??= new ProductComissionRepository(_repoContext);
+        public IComissionRepository Comission => _comission ??= new ComissionRepository(_repoContext);
         public RepositoryWrapper(BaseContext repositoryContext)
         {
             _repoContext = repositoryContext;

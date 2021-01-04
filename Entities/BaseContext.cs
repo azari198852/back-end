@@ -26,6 +26,7 @@ namespace Entities
         public virtual DbSet<CatRole> CatRole { get; set; }
         public virtual DbSet<CatStatus> CatStatus { get; set; }
         public virtual DbSet<Color> Color { get; set; }
+        public virtual DbSet<Comission> Comission { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerAddress> CustomerAddress { get; set; }
         public virtual DbSet<CustomerOffer> CustomerOffer { get; set; }
@@ -60,6 +61,7 @@ namespace Entities
         public virtual DbSet<ProductCatProductParameters> ProductCatProductParameters { get; set; }
         public virtual DbSet<ProductColor> ProductColor { get; set; }
         public virtual DbSet<ProductColorStatusLog> ProductColorStatusLog { get; set; }
+        public virtual DbSet<ProductComission> ProductComission { get; set; }
         public virtual DbSet<ProductCustomerRate> ProductCustomerRate { get; set; }
         public virtual DbSet<ProductCustomerRateImage> ProductCustomerRateImage { get; set; }
         public virtual DbSet<ProductImage> ProductImage { get; set; }
@@ -428,6 +430,35 @@ namespace Entities
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
 
                 entity.Property(e => e.Name).HasMaxLength(64);
+            });
+
+            modelBuilder.Entity<Comission>(entity =>
+            {
+                entity.ToTable("Comission", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.CuserId).HasColumnName("CUserID");
+
+                entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
+
+                entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.Description).HasMaxLength(2048);
+
+                entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.FinalStatusId).HasColumnName("FinalStatusID");
+
+                entity.Property(e => e.Mdate).HasColumnName("MDate");
+
+                entity.Property(e => e.MuserId).HasColumnName("MUserID");
+
+                entity.Property(e => e.SendSms).HasColumnName("SendSMS");
+
+                entity.Property(e => e.Title).HasMaxLength(256);
             });
 
             modelBuilder.Entity<Customer>(entity =>
@@ -1680,6 +1711,41 @@ namespace Entities
                     .WithMany(p => p.ProductColorStatusLog)
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("FK_ProductColorStatusLog_Status");
+            });
+
+            modelBuilder.Entity<ProductComission>(entity =>
+            {
+                entity.ToTable("ProductComission", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.ComissionId).HasColumnName("ComissionID");
+
+                entity.Property(e => e.CuserId).HasColumnName("CUserID");
+
+                entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
+
+                entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.Mdate).HasColumnName("MDate");
+
+                entity.Property(e => e.MuserId).HasColumnName("MUserID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.HasOne(d => d.Comission)
+                    .WithMany(p => p.ProductComission)
+                    .HasForeignKey(d => d.ComissionId)
+                    .HasConstraintName("FK_Table_1_Comission");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.ProductComission)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_Table_1_Product");
             });
 
             modelBuilder.Entity<ProductCustomerRate>(entity =>
