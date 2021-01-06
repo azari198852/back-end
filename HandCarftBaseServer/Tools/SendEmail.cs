@@ -187,6 +187,58 @@ namespace HandCarftBaseServer.Tools
 
         }
 
+        public void SendChangeComissionEmail(string emaill, string sellerName, string productName, int comission)
+        {
+
+            // create email message
+            var email = new MimeMessage();
+            email.Sender = MailboxAddress.Parse("info@tabrizhandicrafts.com");
+            email.To.Add(MailboxAddress.Parse(emaill));
+
+            email.Subject = " ثبت نام در بازارچه اینترنتی صنایع دستی";
+            var body = "با سلام صنعتگر گرامی ";
+            body += sellerName;
+            body += System.Environment.NewLine;
+            body += "کمیسیون محصول ";
+            body += productName;
+            body += " ";
+            body += "شما به ";
+            body += comission.ToString();
+            body += " ";
+            body += "درصد تغییر یافت.";
+            body += System.Environment.NewLine;
+            body += "بازارچه صنایع دستی سارای";
+            body += System.Environment.NewLine;
+            body += "بازارچه صنایع دستی سارای";
+            body += System.Environment.NewLine;
+            body += "http://www.saraycrafts.com/";
+            email.Body = new TextPart(TextFormat.Text) { Text = body };
+            try
+            {
+                using var smtp = new MailKit.Net.Smtp.SmtpClient();
+
+                smtp.Connect("tabrizhandicrafts.com", 587, SecureSocketOptions.Auto);
+
+                // hotmail
+                //smtp.Connect("smtp.live.com", 587, SecureSocketOptions.StartTls);
+
+                // office 365
+                //smtp.Connect("smtp.office365.com", 587, SecureSocketOptions.StartTls);
+                smtp.Authenticate("info@tabrizhandicrafts.com", "123456qQ");
+                smtp.Send(email);
+                smtp.Disconnect(true);
+
+
+            }
+            catch (Exception ex)
+            {
+
+
+            }
+            // send email
+
+        }
+
 
     }
 }
