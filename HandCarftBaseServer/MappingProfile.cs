@@ -373,6 +373,16 @@ namespace HandCarftBaseServer
 
             #endregion
 
+            #region DynamicForms
+
+            CreateMap<DynamiFormImage, DynamiFormImageDto>();
+            CreateMap<DynamiFormDto, DynamicForms>();
+            CreateMap<DynamicForms, DynamiFormDto>()
+                .ForMember(u => u.ImageList,
+                    opt => opt.MapFrom(x => x.DynamiFormImage));
+
+            #endregion
+
         }
     }
 }

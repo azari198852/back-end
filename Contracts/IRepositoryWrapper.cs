@@ -67,6 +67,7 @@ namespace Contracts
         ISellerCatProductRepository SellerCatProduct { get; }
         IProductComissionRepository ProductComission { get; }
         IComissionRepository Comission { get; }
+        IDynamicFormsRepository DynamicForms { get; }
         void Save();
     }
 }
