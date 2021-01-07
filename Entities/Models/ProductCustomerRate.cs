@@ -12,6 +12,7 @@ namespace Entities.Models
             ProductCustomerRateImage = new HashSet<ProductCustomerRateImage>();
         }
 
+
         public long Id { get; set; }
         public long? Pid { get; set; }
         public long? ProductId { get; set; }
@@ -21,6 +22,10 @@ namespace Entities.Models
         public string CommentDesc { get; set; }
         public int? LikeCount { get; set; }
         public int? DisLikeCount { get; set; }
+        public long? FinalStatusId { get; set; }
+        public long? CheckUserId { get; set; }
+        public long? CheckDate { get; set; }
+        public string CheckAnswer { get; set; }
         public long? CuserId { get; set; }
         public long? Cdate { get; set; }
         public long? DuserId { get; set; }
@@ -30,7 +35,9 @@ namespace Entities.Models
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
 
+
         public virtual Customer Customer { get; set; }
+        public virtual StatusType FinalStatus { get; set; }
         [JsonIgnore]
         public virtual ProductCustomerRate P { get; set; }
         public virtual Product Product { get; set; }

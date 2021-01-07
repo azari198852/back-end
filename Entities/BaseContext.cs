@@ -37,6 +37,8 @@ namespace Entities
         public virtual DbSet<CustomerOrderStatusLog> CustomerOrderStatusLog { get; set; }
         public virtual DbSet<CustomerStatusLog> CustomerStatusLog { get; set; }
         public virtual DbSet<Document> Document { get; set; }
+        public virtual DbSet<DynamiFormImage> DynamiFormImage { get; set; }
+        public virtual DbSet<DynamicForms> DynamicForms { get; set; }
         public virtual DbSet<Employee> Employee { get; set; }
         public virtual DbSet<FamousComments> FamousComments { get; set; }
         public virtual DbSet<Forms> Forms { get; set; }
@@ -993,6 +995,67 @@ namespace Entities
                     .HasConstraintName("FK_Document_CatDocument");
             });
 
+            modelBuilder.Entity<DynamiFormImage>(entity =>
+            {
+                entity.ToTable("DynamiFormImage", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.CuserId).HasColumnName("CUserID");
+
+                entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
+
+                entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.DynamicFormId).HasColumnName("DynamicFormID");
+
+                entity.Property(e => e.ImageUrl)
+                    .HasColumnName("ImageURL")
+                    .HasMaxLength(2048);
+
+                entity.Property(e => e.Mdate).HasColumnName("MDate");
+
+                entity.Property(e => e.MuserId).HasColumnName("MUserID");
+
+                entity.HasOne(d => d.DynamicForm)
+                    .WithMany(p => p.DynamiFormImage)
+                    .HasForeignKey(d => d.DynamicFormId)
+                    .HasConstraintName("FK_DynamiFormImage_DynamicForms");
+            });
+
+            modelBuilder.Entity<DynamicForms>(entity =>
+            {
+                entity.ToTable("DynamicForms", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.CuserId).HasColumnName("CUserID");
+
+                entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
+
+                entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.DescriptionMeta).HasMaxLength(2048);
+
+                entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.KeyWords).HasMaxLength(2048);
+
+                entity.Property(e => e.Mdate).HasColumnName("MDate");
+
+                entity.Property(e => e.MuserId).HasColumnName("MUserID");
+
+                entity.Property(e => e.Title).HasMaxLength(512);
+
+                entity.Property(e => e.TitleMetaData).HasMaxLength(2048);
+            });
+
             modelBuilder.Entity<Employee>(entity =>
             {
                 entity.Property(e => e.Id).HasColumnName("ID");
@@ -1750,9 +1813,15 @@ namespace Entities
 
             modelBuilder.Entity<ProductCustomerRate>(entity =>
             {
+                entity.ToTable("ProductCustomerRate", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.CheckAnswer).HasMaxLength(2048);
+
+                entity.Property(e => e.CheckUserId).HasColumnName("CheckUserID");
 
                 entity.Property(e => e.CommentDesc).HasMaxLength(2048);
 
@@ -1766,6 +1835,8 @@ namespace Entities
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
 
+                entity.Property(e => e.FinalStatusId).HasColumnName("FinalStatusID");
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
@@ -1778,6 +1849,11 @@ namespace Entities
                     .WithMany(p => p.ProductCustomerRate)
                     .HasForeignKey(d => d.CustomerId)
                     .HasConstraintName("FK_ProductCustomerRate_Customer");
+
+                entity.HasOne(d => d.FinalStatus)
+                    .WithMany(p => p.ProductCustomerRate)
+                    .HasForeignKey(d => d.FinalStatusId)
+                    .HasConstraintName("FK_ProductCustomerRate_StatusType");
 
                 entity.HasOne(d => d.P)
                     .WithMany(p => p.InverseP)

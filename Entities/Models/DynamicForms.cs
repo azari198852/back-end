@@ -3,18 +3,19 @@ using System.Collections.Generic;
 
 namespace Entities.Models
 {
-    public partial class StatusType
+    public partial class DynamicForms
     {
-        public StatusType()
+        public DynamicForms()
         {
-            ProductCustomerRate = new HashSet<ProductCustomerRate>();
-            Status = new HashSet<Status>();
+            DynamiFormImage = new HashSet<DynamiFormImage>();
         }
 
         public long Id { get; set; }
-        public string Name { get; set; }
-        public int? Rkey { get; set; }
+        public string Title { get; set; }
+        public string TitleMetaData { get; set; }
+        public string DescriptionMeta { get; set; }
         public string Description { get; set; }
+        public string KeyWords { get; set; }
         public long? CuserId { get; set; }
         public long? Cdate { get; set; }
         public long? DuserId { get; set; }
@@ -22,8 +23,8 @@ namespace Entities.Models
         public long? MuserId { get; set; }
         public long? Mdate { get; set; }
         public long? DaUserId { get; set; }
+        public long? DaDate { get; set; }
 
-        public virtual ICollection<ProductCustomerRate> ProductCustomerRate { get; set; }
-        public virtual ICollection<Status> Status { get; set; }
+        public virtual ICollection<DynamiFormImage> DynamiFormImage { get; set; }
     }
 }
