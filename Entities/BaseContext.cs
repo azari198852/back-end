@@ -27,6 +27,7 @@ namespace Entities
         public virtual DbSet<CatStatus> CatStatus { get; set; }
         public virtual DbSet<Color> Color { get; set; }
         public virtual DbSet<Comission> Comission { get; set; }
+        public virtual DbSet<CustomerFavoriteProducts> CustomerFavoriteProducts { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerAddress> CustomerAddress { get; set; }
         public virtual DbSet<CustomerOffer> CustomerOffer { get; set; }
@@ -596,6 +597,27 @@ namespace Entities
                     .WithMany(p => p.CustomerAddressProvince)
                     .HasForeignKey(d => d.ProvinceId)
                     .HasConstraintName("FK_CustomerAddress_Location");
+            });
+
+            modelBuilder.Entity<CustomerFavoriteProducts>(entity =>
+            {
+                entity.ToTable("CustomerFavoriteProducts", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.Property(e => e.ProductId).HasColumnName("ProductID");
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.CustomerFavoriteProducts)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_CustomerFavoriteProducts_Customer");
+
+                entity.HasOne(d => d.Product)
+                    .WithMany(p => p.CustomerFavoriteProducts)
+                    .HasForeignKey(d => d.ProductId)
+                    .HasConstraintName("FK_CustomerFavoriteProducts_Product");
             });
 
             modelBuilder.Entity<CustomerOffer>(entity =>

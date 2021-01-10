@@ -8,6 +8,7 @@ namespace Entities.Models
         public Customer()
         {
             CustomerAddress = new HashSet<CustomerAddress>();
+            CustomerFavoriteProducts = new HashSet<CustomerFavoriteProducts>();
             CustomerOffer = new HashSet<CustomerOffer>();
             CustomerOrder = new HashSet<CustomerOrder>();
             CustomerStatusLog = new HashSet<CustomerStatusLog>();
@@ -34,6 +35,7 @@ namespace Entities.Models
         public string MobileAppVersion { get; set; }
         public long? MobileAppTypeId { get; set; }
         public long? CustomerClubCode { get; set; }
+        public bool? HaveWallet { get; set; }
         public long? WalletFinalPrice { get; set; }
         public long? CustomerFinalScore { get; set; }
         public long? WorkId { get; set; }
@@ -54,6 +56,7 @@ namespace Entities.Models
         public virtual Users User { get; set; }
         public virtual Work Work { get; set; }
         public virtual ICollection<CustomerAddress> CustomerAddress { get; set; }
+        public virtual ICollection<CustomerFavoriteProducts> CustomerFavoriteProducts { get; set; }
         public virtual ICollection<CustomerOffer> CustomerOffer { get; set; }
         public virtual ICollection<CustomerOrder> CustomerOrder { get; set; }
         public virtual ICollection<CustomerStatusLog> CustomerStatusLog { get; set; }

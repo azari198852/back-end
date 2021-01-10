@@ -9,6 +9,7 @@ namespace Entities.Models
         public Product()
         {
             CustomerOrderProduct = new HashSet<CustomerOrderProduct>();
+            CustomerFavoriteProducts = new HashSet<CustomerFavoriteProducts>();
             PackageProduct = new HashSet<PackageProduct>();
             ProductCatProductParameters = new HashSet<ProductCatProductParameters>();
             ProductColor = new HashSet<ProductColor>();
@@ -71,6 +72,7 @@ namespace Entities.Models
         public virtual CatProduct CatProduct { get; set; }
         public virtual Status FinalStatus { get; set; }
         public virtual Seller Seller { get; set; }
+        public virtual ICollection<CustomerFavoriteProducts> CustomerFavoriteProducts { get; set; }
         public virtual ICollection<CustomerOrderProduct> CustomerOrderProduct { get; set; }
         public virtual ICollection<PackageProduct> PackageProduct { get; set; }
         public virtual ICollection<ProductCatProductParameters> ProductCatProductParameters { get; set; }
