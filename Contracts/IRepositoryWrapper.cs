@@ -68,6 +68,7 @@ namespace Contracts
         IProductComissionRepository ProductComission { get; }
         IComissionRepository Comission { get; }
         IDynamicFormsRepository DynamicForms { get; }
+        IDynamiFormImageRepository DynamiFormImage { get; }
         void Save();
     }
 }

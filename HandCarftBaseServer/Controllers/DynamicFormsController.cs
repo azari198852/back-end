@@ -59,6 +59,32 @@ namespace HandCarftBaseServer.Controllers
         }
 
         /// <summary>
+        /// دریافت صفحه استاتیک با آیدی  
+        /// </summary>
+        [Authorize]
+        [HttpGet]
+        [Route("DynamicForms/GetStaticFormsById")]
+        public IActionResult GetStaticFormsById(long dynamicFormsId)
+        {
+            try
+            {
+
+                var res = _repository.DynamicForms.FindByCondition(c => c.DaDate == null && c.Ddate == null)
+                    .Include(c => c.DynamiFormImage).FirstOrDefault();
+                    
+                var result = _mapper.Map<DynamiFormDto>(res);
+
+                _logger.LogData(MethodBase.GetCurrentMethod(), result, null);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
+                return BadRequest(e.Message);
+            }
+        }
+
+        /// <summary>
         /// حدف صفحه استاتیک  
         /// </summary>
         [Authorize]
@@ -154,42 +180,63 @@ namespace HandCarftBaseServer.Controllers
             {
                 var userId = ClaimPrincipalFactory.GetUserId(User);
                 var dynamicForms = JsonSerializer.Deserialize<DynamiFormDto>(HttpContext.Request.Form["DynamicForms"]);
-                var _dynamicForms = _mapper.Map<DynamicForms>(dynamicForms);
-                _dynamicForms.Cdate = DateTime.Now.Ticks;
-                _dynamicForms.CuserId = userId;
+                var _dynamicForms = _repository.DynamicForms.FindByCondition(c => c.Id == dynamicFormsId)
+                    .FirstOrDefault();
+                if (_dynamicForms == null)
+                    throw new BusinessException(XError.GetDataErrors.NotFound());
+                _dynamicForms.Mdate = DateTime.Now.Ticks;
+                _dynamicForms.MuserId = userId;
+                _dynamicForms.Description = dynamicForms.Description;
+                _dynamicForms.DescriptionMeta= dynamicForms.DescriptionMeta;
+                _dynamicForms.Title = dynamicForms.Title;
+                _dynamicForms.TitleMetaData = dynamicForms.TitleMetaData;
+                _dynamicForms.KeyWords = dynamicForms.KeyWords;
+                
 
 
                 var fileList = HttpContext.Request.Form.Files.ToList();
-
-                foreach (var uploadFileStatus in fileList.Select(file => FileManeger.FileUploader(file, 1, "DynamicFormImages")))
+                if (fileList.Count > 0)
                 {
-                    if (uploadFileStatus.Status == 200)
+
+                    foreach (var uploadFileStatus in fileList.Select(file => FileManeger.FileUploader(file, 1, "DynamicFormImages")))
                     {
-                        var image = new DynamiFormImage
+                        var tobedeletedList = _repository.DynamiFormImage
+                            .FindByCondition(c => c.DynamicFormId == dynamicFormsId).ToList();
+                        foreach (var item in tobedeletedList)
                         {
-                            Cdate = DateTime.Now.Ticks,
-                            CuserId = userId,
-                            ImageUrl = uploadFileStatus.Path
-                        };
-                        _dynamicForms.DynamiFormImage.Add(image);
-                    }
-                    else
-                    {
-                        throw new BusinessException(uploadFileStatus.Path, 100);
+                            item.Ddate = DateTime.Now.Ticks;
+                            item.DuserId = userId;
+                            _repository.DynamiFormImage.Update(item);
+                        }
+                        if (uploadFileStatus.Status == 200)
+                        {
+                            var image = new DynamiFormImage
+                            {
+                                Cdate = DateTime.Now.Ticks,
+                                CuserId = userId,
+                                ImageUrl = uploadFileStatus.Path
+                            };
+                            _dynamicForms.DynamiFormImage.Add(image);
+                        }
+                        else
+                        {
+                            throw new BusinessException(uploadFileStatus.Path, 100);
+                        }
                     }
                 }
+
 
                 _repository.DynamicForms.Create(_dynamicForms);
                 _repository.Save();
 
-                _logger.LogData(MethodBase.GetCurrentMethod(), _dynamicForms.Id, null);
-                return Ok(_dynamicForms.Id);
+                _logger.LogData(MethodBase.GetCurrentMethod(), General.Results_.SuccessMessage(), null,dynamicFormsId);
+                return Ok(General.Results_.SuccessMessage());
 
 
             }
             catch (Exception e)
             {
-                _logger.LogError(e, MethodBase.GetCurrentMethod());
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), dynamicFormsId);
                 return BadRequest(e.Message);
             }
 

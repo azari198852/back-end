@@ -379,7 +379,7 @@ namespace HandCarftBaseServer
             CreateMap<DynamiFormDto, DynamicForms>();
             CreateMap<DynamicForms, DynamiFormDto>()
                 .ForMember(u => u.ImageList,
-                    opt => opt.MapFrom(x => x.DynamiFormImage));
+                    opt => opt.MapFrom(x => x.DynamiFormImage.Where(c => c.Ddate == null && c.DaDate == null)));
 
             #endregion
 

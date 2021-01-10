@@ -70,6 +70,7 @@ namespace Repository
         private IProductComissionRepository _productComission;
         private IComissionRepository _comission;
         private IDynamicFormsRepository _dynamicForms;
+        private IDynamiFormImageRepository _dynamiFormImage;
 
 
         public IApiRepository Api => _api ??= new ApiRepository(_repoContext);
@@ -133,6 +134,7 @@ namespace Repository
         public IProductComissionRepository ProductComission => _productComission ??= new ProductComissionRepository(_repoContext);
         public IComissionRepository Comission => _comission ??= new ComissionRepository(_repoContext);
         public IDynamicFormsRepository DynamicForms => _dynamicForms ??= new DynamicFormsRepository(_repoContext);
+        public IDynamiFormImageRepository DynamiFormImage => _dynamiFormImage ??= new DynamiFormImageRepository(_repoContext);
         public RepositoryWrapper(BaseContext repositoryContext)
         {
             _repoContext = repositoryContext;

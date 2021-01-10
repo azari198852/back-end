@@ -48,6 +48,7 @@ namespace HandCarftBaseServer.Controllers
 
                 var res = _repository.Offer.FindByCondition(c => c.Ddate == null)
                     .Include(c => c.OfferType)
+                    .Include(c => c.ProductOffer).ThenInclude(c => c.Product)
                     .Select(c => new
                     {
                         c.Id,
@@ -58,7 +59,8 @@ namespace HandCarftBaseServer.Controllers
                         c.Value,
                         c.Description,
                         Type = c.OfferType.Name,
-                        Status = c.DaDate == null ? "فعال" : "غیرفعال"
+                        Status = c.DaDate == null ? "فعال" : "غیرفعال",
+                        ProductList = c.ProductOffer.Select(x => string.Join('-', x.Product.Name)).FirstOrDefault()
 
                     }).OrderByDescending(c => c.Id).ToList();
                 _logger.LogData(MethodBase.GetCurrentMethod(), res, null);
@@ -128,6 +130,8 @@ namespace HandCarftBaseServer.Controllers
                 offer.DaDate ??= DateTime.Now.Ticks;
                 if (offer.DaDate != null)
                     offer.DaDate = null;
+                _repository.Offer.Update(offer);
+                _repository.Save();
                 _logger.LogData(MethodBase.GetCurrentMethod(), General.Results_.SuccessMessage(), null, offerId);
                 return Ok(General.Results_.SuccessMessage());
 
@@ -417,7 +421,7 @@ namespace HandCarftBaseServer.Controllers
                     .Select(c => c.OfferId);
 
                 var res = _repository.Offer
-                    .FindByCondition(c =>  c.Ddate == null && offerlist.Contains(c.Id)).Include(c=>c.OfferType)
+                    .FindByCondition(c => c.Ddate == null && offerlist.Contains(c.Id)).Include(c => c.OfferType)
                     .Select(c => new
                     {
                         c.Id,
