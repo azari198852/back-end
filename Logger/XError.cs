@@ -42,6 +42,7 @@ namespace Logger
             public static XError PaymentInfoNotFound() => new XError(4004, "اطلاعاتی برای پارامترهای ارسالی یافت نشد");
             public static XError FailedPayment() => new XError(4005, "پرداخت نا موفق");
             public static XError InvalidOrderProductStatus() => new XError(4006, "وضعیت فعلی قابل تغییر به وضعیت انتخابی نیست");
+            public static XError HaveChild() => new XError(4007, "این رکورد در جای دیگری از سیستم استفاده شده است");
 
         }
 

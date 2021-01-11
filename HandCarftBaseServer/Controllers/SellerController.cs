@@ -54,6 +54,31 @@ namespace HandCarftBaseServer.Controllers
             }
         }
 
+        [Authorize]
+        [HttpGet]
+        [Route("Seller/GetCurrentSellerInfo")]
+        public IActionResult GetCurrentSellerInfo()
+        {
+            try
+            {
+                var userId = ClaimPrincipalFactory.GetUserId(User);
+                var res = _repository.Seller.FindByCondition(c => c.UserId == userId).Select(c =>
+                    new
+                    {
+                        c.Id, c.Name, c.Fname, c.MelliCode, c.Mobile, c.Email, Password = c.User.Hpassword,
+                        BirthDate = DateTimeFunc.TimeTickToMiladi(c.Bdate.Value), c.ShabaNo
+                    }).FirstOrDefault();
+                
+                _logger.LogData(MethodBase.GetCurrentMethod(), res, null);
+                return Ok(res);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
+                return BadRequest(e.Message);
+            }
+        }
+
 
         [HttpGet]
         [Route("Seller/GetSellerListForGrid")]

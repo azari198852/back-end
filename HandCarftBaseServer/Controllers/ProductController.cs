@@ -430,7 +430,7 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductListFilterBySeller_Name")]
-        public IActionResult GetProductById(long? sellerId, string productName)
+        public IActionResult GetProductListFilterBySeller_Name(long? sellerId, string productName)
         {
             try
             {
@@ -470,6 +470,27 @@ namespace HandCarftBaseServer.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, MethodBase.GetCurrentMethod(), filter);
+                return BadRequest(e.Message);
+            }
+
+        }
+
+        /// <summary>
+        /// لیست محصولات براساس نام محصول  
+        /// </summary>
+        [HttpGet]
+        [Route("Product/GetProductListFilter_Name")]
+        public IActionResult GetProductListFilter_Name(string productName)
+        {
+            try
+            {
+                var result = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null  && (c.Name.Contains(productName) || string.IsNullOrWhiteSpace(productName))).Select(c => new { c.Id, c.Name, }).ToList();
+                _logger.LogData(MethodBase.GetCurrentMethod(), result, null, productName);
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), productName);
                 return BadRequest(e.Message);
             }
 
