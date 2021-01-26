@@ -74,12 +74,12 @@ namespace HandCarftBaseServer.Controllers
                     
                 var result = _mapper.Map<DynamiFormDto>(res);
 
-                _logger.LogData(MethodBase.GetCurrentMethod(), result, null);
+                _logger.LogData(MethodBase.GetCurrentMethod(), result, null, dynamicFormsId);
                 return Ok(res);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, MethodBase.GetCurrentMethod());
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), dynamicFormsId);
                 return BadRequest(e.Message);
             }
         }

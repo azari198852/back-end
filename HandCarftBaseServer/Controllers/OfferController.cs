@@ -127,9 +127,16 @@ namespace HandCarftBaseServer.Controllers
                     throw new BusinessException(XError.GetDataErrors.NotFound());
 
                 offer.DaUserId = ClaimPrincipalFactory.GetUserId(User);
-                offer.DaDate ??= DateTime.Now.Ticks;
+
                 if (offer.DaDate != null)
+                {
                     offer.DaDate = null;
+                }
+                else
+                {
+                    offer.DaDate = DateTime.Now.Ticks;
+                }
+
                 _repository.Offer.Update(offer);
                 _repository.Save();
                 _logger.LogData(MethodBase.GetCurrentMethod(), General.Results_.SuccessMessage(), null, offerId);
@@ -232,13 +239,13 @@ namespace HandCarftBaseServer.Controllers
                     Cdate = DateTime.Now.Ticks,
                     CuserId = ClaimPrincipalFactory.GetUserId(User),
                     Description = offerInsert.Description,
-                    FromDate = offerInsert.FromDate,
+                    FromDate = offerInsert.FromDate?.Ticks ?? 0,
                     HaveTimer = offerInsert.HaveTimer,
                     MaximumPrice = offerInsert.MaximumPrice,
                     Name = offerInsert.Name,
                     OfferCode = offerInsert.OfferCode,
                     OfferTypeId = offerInsert.OfferTypeId,
-                    ToDate = offerInsert.ToDate,
+                    ToDate = offerInsert.ToDate?.Ticks ?? 0,
                     Value = offerInsert.Value
                 };
                 offerInsert.ProductIdList.ForEach(c =>
@@ -249,8 +256,8 @@ namespace HandCarftBaseServer.Controllers
                         CuserId = ClaimPrincipalFactory.GetUserId(User),
                         ProductId = c,
                         Value = offerInsert.Value,
-                        FromDate = offerInsert.FromDate,
-                        ToDate = offerInsert.ToDate
+                        FromDate = offerInsert.FromDate?.Ticks ?? 0,
+                        ToDate = offerInsert.ToDate?.Ticks ?? 0
                     };
                     offer.ProductOffer.Add(productOffer);
                 });
@@ -295,13 +302,13 @@ namespace HandCarftBaseServer.Controllers
                 offer.Mdate = DateTime.Now.Ticks;
                 offer.MuserId = ClaimPrincipalFactory.GetUserId(User);
                 offer.Description = offerInsert.Description;
-                offer.FromDate = offerInsert.FromDate;
+                offer.FromDate = offerInsert.FromDate?.Ticks ?? 0;
                 offer.HaveTimer = offerInsert.HaveTimer;
                 offer.MaximumPrice = offerInsert.MaximumPrice;
                 offer.Name = offerInsert.Name;
                 offer.OfferCode = offerInsert.OfferCode;
                 offer.OfferTypeId = offerInsert.OfferTypeId;
-                offer.ToDate = offerInsert.ToDate;
+                offer.ToDate = offerInsert.ToDate?.Ticks ?? 0;
                 offer.Value = offerInsert.Value;
 
                 var deletedPRoductOffer = _repository.ProductOffer.FindByCondition(c => c.OfferId == offerInsert.Id)
@@ -321,8 +328,8 @@ namespace HandCarftBaseServer.Controllers
                         CuserId = ClaimPrincipalFactory.GetUserId(User),
                         ProductId = c,
                         Value = offerInsert.Value,
-                        FromDate = offerInsert.FromDate,
-                        ToDate = offerInsert.ToDate
+                        FromDate = offerInsert.FromDate?.Ticks ?? 0,
+                        ToDate = offerInsert.ToDate?.Ticks ?? 0
                     };
                     offer.ProductOffer.Add(productOffer);
                 });
@@ -408,7 +415,7 @@ namespace HandCarftBaseServer.Controllers
         ///دریافت سابقه تخفیفات محصول
         /// </summary>
         [Authorize]
-        [HttpDelete]
+        [HttpGet]
         [Route("Offer/GetProductOfferHistoryList")]
         public IActionResult GetProductOfferHistoryList(long productId)
         {

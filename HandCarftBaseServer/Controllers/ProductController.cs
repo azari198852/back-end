@@ -449,7 +449,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         /// لیست محصولات براساس فیلترها  
         /// </summary>
-        [HttpGet]
+        [HttpPost]
         [Route("Product/GetProductListByFilter")]
         public IActionResult GetProductListByFilter(GetProductListByFilterParams filter)
         {
@@ -461,8 +461,8 @@ namespace HandCarftBaseServer.Controllers
                                                                       (filter.ProductIds.Contains(c.Id) || filter.ProductIds.Count == 0) &&
                                                                       (filter.FromPrice <= c.Price || filter.FromPrice == null) &&
                                                                       (filter.ToPrice >= c.Price || filter.ToPrice == null))
-                                                                      .Include(c => c.CatProduct).Include(c => c.Seller)
-                                                                      .Select(c => new { c.Id, c.Name, c.Coding, c.Count, CatProduct = c.CatProduct.Name, Seller = c.Seller.Name + " " + c.Seller.Fname })
+                                                                      .Include(c => c.CatProduct).Include(c => c.Seller).Include(c=>c.ProductOffer)
+                                                                      .Select(c => new { c.Id, c.Name, c.Coding, c.Count, CatProduct = c.CatProduct.Name, Seller = c.Seller.Name + " " + c.Seller.Fname, c.Price ,OfferCount=c.ProductOffer.Count})
                                                                       .OrderByDescending(c => c.Id).AsNoTracking().ToList();
                 _logger.LogData(MethodBase.GetCurrentMethod(), result, null, filter);
                 return Ok(result);
@@ -484,7 +484,7 @@ namespace HandCarftBaseServer.Controllers
         {
             try
             {
-                var result = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null  && (c.Name.Contains(productName) || string.IsNullOrWhiteSpace(productName))).Select(c => new { c.Id, c.Name, }).ToList();
+                var result = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && (c.Name.Contains(productName) || string.IsNullOrWhiteSpace(productName))).Select(c => new { c.Id, c.Name, }).ToList();
                 _logger.LogData(MethodBase.GetCurrentMethod(), result, null, productName);
                 return Ok(result);
             }

@@ -9,8 +9,8 @@ namespace Entities.DataTransferObjects
         public long Id { get; set; }
         public long? OfferTypeId { get; set; }
         public string Name { get; set; }
-        public long? FromDate { get; set; }
-        public long? ToDate { get; set; }
+        public DateTime? FromDate { get; set; }
+        public DateTime? ToDate { get; set; }
         public double? Value { get; set; }
         public string OfferCode { get; set; }
         public long? MaximumPrice { get; set; }

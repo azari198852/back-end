@@ -149,6 +149,10 @@ namespace HandCarftBaseServer.Controllers
             {
                 var userId = ClaimPrincipalFactory.GetUserId(User);
                 var sellerId = _repository.Seller.GetSellerIdByUserId(userId);
+                if (sellerId == 0)
+                {
+                    throw new BusinessException(XError.AuthenticationErrors.NotHaveRequestedRole());
+                }
 
                 var product = _repository.CustomerOrderProduct.FindByCondition(c => c.Id == customerOrderProductId)
                     .FirstOrDefault();
@@ -223,7 +227,7 @@ namespace HandCarftBaseServer.Controllers
         /// لیست فروشندها براساس دسته بندی محصولات  
         /// </summary>
 
-        [HttpGet]
+        [HttpPost]
         [Route("Seller/GetSellerListByCatProduct")]
         public IActionResult GetSellerListByCatProduct(List<long> catProductsIds)
         {
