@@ -462,19 +462,19 @@ namespace HandCarftBaseServer.Controllers
         [Authorize]
         [HttpGet]
         [Route("Offer/GetOfferValueByCode_UI")]
-        public ListResult<OfferDto> GetOfferValueByCode_UI(string offerCode)
+        public SingleResult<OfferDto> GetOfferValueByCode_UI(string offerCode)
         {
             try
             {
 
                 var time = DateTime.Now.Ticks;
                 var offer = _repository.Offer.FindByCondition(c => c.OfferCode == offerCode && c.Ddate == null && c.DaDate == null).Include(c => c.OfferType).FirstOrDefault();
-                if (offer == null) return ListResult<OfferDto>.GetFailResult("کد تخفیف وارد شده صحیح نمی باشد!");
+                if (offer == null) return SingleResult<OfferDto>.GetFailResult("کد تخفیف وارد شده صحیح نمی باشد!");
                 if (offer.OfferType.PublicOffer == true)
                 {
-                    if (offer.FromDate > time || time > offer.ToDate) return ListResult<OfferDto>.GetFailResult("کد تخفیف وارد شده در تاریخ جاری معتبر نمی باشد!");
-                    var result = _mapper.Map<List<OfferDto>>(offer);
-                    var finalresult = ListResult<OfferDto>.GetSuccessfulResult(result);
+                    if (offer.FromDate > time || time > offer.ToDate) return SingleResult<OfferDto>.GetFailResult("کد تخفیف وارد شده در تاریخ جاری معتبر نمی باشد!");
+                    var result = _mapper.Map<OfferDto>(offer);
+                    var finalresult = SingleResult<OfferDto>.GetSuccessfulResult(result);
                     return finalresult;
                 }
                 else
@@ -485,13 +485,13 @@ namespace HandCarftBaseServer.Controllers
                     var customerOffer = _repository.CustomerOffer.FindByCondition(c =>
                               c.DaDate == null && c.Ddate == null && c.CustomerId == customerId && c.OfferId == offer.Id)
                          .FirstOrDefault();
-                    if (customerOffer == null) return ListResult<OfferDto>.GetFailResult("کد تخفیف وارد شده صحیح نمی باشد!");
-                    if (customerOffer.FromDate > time || customerOffer.ToDate < time) return ListResult<OfferDto>.GetFailResult("کد تخفیف وارد شده در تاریخ جاری معتبر نمی باشد!");
+                    if (customerOffer == null) return SingleResult<OfferDto>.GetFailResult("کد تخفیف وارد شده صحیح نمی باشد!");
+                    if (customerOffer.FromDate > time || customerOffer.ToDate < time) return SingleResult<OfferDto>.GetFailResult("کد تخفیف وارد شده در تاریخ جاری معتبر نمی باشد!");
                     if (offer.UsageCount != null && !(offer.UsageCount > customerOffer.UsageCount))
-                        return ListResult<OfferDto>.GetFailResult(
+                        return SingleResult<OfferDto>.GetFailResult(
                             "تعداد دفعات استفاده از کد تخفیف به پایان رسیده است!");
-                    var result = _mapper.Map<List<OfferDto>>(customerOffer);
-                    var finalresult = ListResult<OfferDto>.GetSuccessfulResult(result);
+                    var result = _mapper.Map<OfferDto>(customerOffer);
+                    var finalresult = SingleResult<OfferDto>.GetSuccessfulResult(result);
                     return finalresult;
 
 
@@ -502,7 +502,7 @@ namespace HandCarftBaseServer.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, MethodBase.GetCurrentMethod(), offerCode);
-                return ListResult<OfferDto>.GetFailResult(null);
+                return SingleResult<OfferDto>.GetFailResult(null);
 
             }
         }

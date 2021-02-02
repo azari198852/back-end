@@ -219,8 +219,11 @@ namespace HandCarftBaseServer
             #region Offer
 
             CreateMap<Offer, OfferDto>()
-                .ForMember(u => u.OfferId, opt => opt.MapFrom(x => x.Id));
+                .ForMember(u => u.OfferId, opt => opt.MapFrom(x => x.Id))
+                .ForMember(u => u.CustomerOfferId, opt => opt.MapFrom(x => x.Id));
+              
 
+            CreateMap<OfferDto, Offer>();
             #endregion
 
             #region CustomerOffer

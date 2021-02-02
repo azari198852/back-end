@@ -11,6 +11,7 @@ namespace Entities.Models
             ProductOffer = new HashSet<ProductOffer>();
         }
 
+
         public long Id { get; set; }
         public long? OfferTypeId { get; set; }
         public string Name { get; set; }
