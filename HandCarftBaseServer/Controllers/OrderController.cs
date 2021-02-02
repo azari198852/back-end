@@ -213,7 +213,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///پیشنمایش سفارش
         /// </summary>
-       // [Authorize]
+        [Authorize]
         [HttpPost]
         [Route("Product/CustomerOrderPreview_UI")]
         public SingleResult<OrderPreViewResultDto> CustomerOrderPreview_UI(OrderModel order)
@@ -222,13 +222,13 @@ namespace HandCarftBaseServer.Controllers
             {
 
                 var orerProductList = new List<CustomerOrderProduct>();
-
+                var time = DateTime.Now.Ticks;
 
 
                 order.ProductList.ForEach(c =>
                 {
                     var product = _repository.Product.FindByCondition(x => x.Id == c.ProductId).First();
-                    var ofer = _repository.Offer.FindByCondition(x => x.Id == c.OfferId).FirstOrDefault();
+                    var ofer = _repository.ProductOffer.FindByCondition(x => x.ProductId == c.ProductId && x.FromDate <= time && time <= x.ToDate && x.DaDate == null && x.Ddate == null).Include(c => c.Offer).FirstOrDefault();
                     var packingType = _repository.ProductPackingType.FindByCondition(x => x.Id == c.PackingTypeId)
                         .FirstOrDefault();
                     var statusId = _repository.Status.GetSatusId("CustomerOrderProduct", 2);
@@ -240,7 +240,7 @@ namespace HandCarftBaseServer.Controllers
                         ProductName = product.Name,
                         ProductPrice = product.Price,
                         ProductOfferId = c.OfferId,
-                        ProductOfferCode = ofer?.OfferCode,
+                        ProductOfferCode = ofer?.Offer.OfferCode,
                         ProductOfferPrice = (long?)(ofer != null ? (ofer.Value / 100 * product.Price) : 0),
                         ProductOfferValue = ofer?.Value,
                         PackingTypeId = c.PackingTypeId,
@@ -320,7 +320,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///ثبت سفارش
         /// </summary>
-     //   [Authorize]
+        [Authorize]
         [HttpPost]
         [Route("Product/InsertCustomerOrder_UI")]
         public SingleResult<InsertOrderResultDto> GetProductByIdList_UI(OrderModel order)
@@ -328,6 +328,7 @@ namespace HandCarftBaseServer.Controllers
             try
             {
                 var userId = ClaimPrincipalFactory.GetUserId(User);
+                var time = DateTime.Now.Ticks;
                 var cc = _repository.Customer.FindByCondition(c => c.UserId == userId).FirstOrDefault();
                 var customerId = cc.Id;
                 var today = DateTime.Now.AddDays(-1).Ticks;
@@ -342,7 +343,7 @@ namespace HandCarftBaseServer.Controllers
                 order.ProductList.ForEach(c =>
                 {
                     var product = _repository.Product.FindByCondition(x => x.Id == c.ProductId).First();
-                    var ofer = _repository.Offer.FindByCondition(x => x.Id == c.OfferId).FirstOrDefault();
+                    var ofer = _repository.ProductOffer.FindByCondition(x => x.ProductId == c.ProductId && x.FromDate <= time && time <= x.ToDate && x.DaDate == null && x.Ddate == null).Include(c => c.Offer).FirstOrDefault();
                     var packingType = _repository.ProductPackingType.FindByCondition(x => x.Id == c.PackingTypeId)
                         .FirstOrDefault();
                     var statusId = _repository.Status.GetSatusId("CustomerOrderProduct", 2);
@@ -358,7 +359,7 @@ namespace HandCarftBaseServer.Controllers
                         ProductName = product.Name,
                         ProductPrice = product.Price,
                         ProductOfferId = c.OfferId,
-                        ProductOfferCode = ofer?.OfferCode,
+                        ProductOfferCode = ofer?.Offer.OfferCode,
                         ProductOfferPrice = (long?)(ofer != null ? (ofer.Value / 100 * product.Price) : 0),
                         ProductOfferValue = ofer?.Value,
                         PackingTypeId = packingType?.PackinggTypeId,
@@ -560,7 +561,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///استعلام پرداخت از بانک
         /// </summary>
-       // [Authorize]
+        [Authorize]
         [HttpGet]
         [Route("CustomerOrderPayment/VerifyPayment_UI")]
         public SingleResult<string> VerifyPayment(string authority, string status)
@@ -600,7 +601,7 @@ namespace HandCarftBaseServer.Controllers
                     var sendEmail = new SendEmail();
                     var email = customer.Email;
                     sendEmail.SendSuccessOrderPayment(email, orderpeymnt.OrderNo, customerOrderId.Value);
-                  
+
 
 
                     var productist = _repository.CustomerOrderProduct.FindByCondition(c => c.CustomerOrderId == customerOrderId).Select(c => c.Product).ToList();
@@ -628,7 +629,7 @@ namespace HandCarftBaseServer.Controllers
                     var finalres = SingleResult<string>.GetSuccessfulResult("عملیات پرداخت با موفقیت انجام شد.");
                     _logger.LogData(MethodBase.GetCurrentMethod(), finalres, null, customerOrderId);
                     return finalres;
-               
+
 
                 }
                 else
@@ -638,8 +639,8 @@ namespace HandCarftBaseServer.Controllers
                     orderpeymnt.TransactionDate = DateTime.Now.Ticks;
                     _repository.CustomerOrderPayment.Update(orderpeymnt);
                     _repository.Save();
-                   
-                   throw new BusinessException(XError.BusinessErrors.FailedPayment());
+
+                    throw new BusinessException(XError.BusinessErrors.FailedPayment());
 
                 }
 
