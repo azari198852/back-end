@@ -131,20 +131,20 @@ namespace HandCarftBaseServer
                 .ForMember(u => u.OfferId,
                     opt => opt.MapFrom(x =>
                         x.ProductOffer
-                            .Where(c => c.Offer.FromDate < now && now < c.Offer.ToDate && c.DaDate == null &&
+                            .Where(c => c.FromDate < now && now < c.ToDate && c.DaDate == null &&
                                         c.Ddate == null).Select(c => c.OfferId).FirstOrDefault()))
                 .ForMember(u => u.OfferPercent, opt => opt.MapFrom(x =>
                     x.ProductOffer
-                        .Where(c => c.Offer.FromDate < now && now < c.Offer.ToDate && c.DaDate == null &&
-                                    c.Ddate == null).Select(c => c.Offer.Value).DefaultIfEmpty(0).FirstOrDefault()))
+                        .Where(c => c.FromDate < now && now < c.ToDate && c.DaDate == null &&
+                                    c.Ddate == null).Select(c => c.Value).DefaultIfEmpty(0).FirstOrDefault()))
                 .ForMember(u => u.OfferAmount, opt => opt.MapFrom(x =>
                     (x.ProductOffer
-                        .Where(c => c.Offer.FromDate < now && now < c.Offer.ToDate && c.DaDate == null &&
-                                    c.Ddate == null).Select(c => c.Offer.Value).DefaultIfEmpty(0).FirstOrDefault()) * x.Price / 100))
+                        .Where(c => c.FromDate < now && now < c.ToDate && c.DaDate == null &&
+                                    c.Ddate == null).Select(c => c.Value).DefaultIfEmpty(0).FirstOrDefault()) * x.Price / 100))
                 .ForMember(u => u.PriceAftterOffer, opt => opt.MapFrom(x =>
                     x.Price - ((x.ProductOffer
-                                   .Where(c => c.Offer.FromDate < now && now < c.Offer.ToDate && c.DaDate == null &&
-                                               c.Ddate == null).Select(c => c.Offer.Value).DefaultIfEmpty(0).FirstOrDefault()) * x.Price /
+                                   .Where(c => c.FromDate < now && now < c.ToDate && c.DaDate == null &&
+                                               c.Ddate == null).Select(c => c.Value).DefaultIfEmpty(0).FirstOrDefault()) * x.Price /
                                100)));
 
             CreateMap<Product, ProductGeneralSearchResultDto>()
@@ -221,7 +221,7 @@ namespace HandCarftBaseServer
             CreateMap<Offer, OfferDto>()
                 .ForMember(u => u.OfferId, opt => opt.MapFrom(x => x.Id))
                 .ForMember(u => u.CustomerOfferId, opt => opt.MapFrom(x => x.Id));
-              
+
 
             CreateMap<OfferDto, Offer>();
             #endregion
@@ -386,6 +386,23 @@ namespace HandCarftBaseServer
 
             #endregion
 
+            #region SellerComment
+
+            CreateMap<SellerComment, SellerCommentDto>()
+                .ForMember(u => u.SellerName,
+                    opt => opt.MapFrom(x => x.Seller.Name + " " + x.Seller.Fname))
+                .ForMember(u => u.CommentType,
+                    opt => opt.MapFrom(x => x.CommentType == 1 ? "بیوگرافی" : "نظر"))
+                .ForMember(u => u.Status,
+                    opt => opt.MapFrom(x => x.FinalStatus.Name))
+                .ForMember(u => u.ProfileImage,
+                    opt => opt.MapFrom(x => x.Seller.ProfileImageUrl));
+
+
+
+            CreateMap<SellerCommentDto, SellerComment>();
+
+            #endregion
         }
     }
 }

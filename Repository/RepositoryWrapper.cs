@@ -65,6 +65,7 @@ namespace Repository
         private ISellerDocumentRepository _sellerDocument;
         private IWorkRepository _work;
         private ISellerAddressRepository _sellerAddress;
+        private ISellerCommentRepository _sellerComment;
         private IProductOfferRepository _productOffer;
         private ISellerCatProductRepository _sellerCatProduct;
         private IProductComissionRepository _productComission;
@@ -130,6 +131,7 @@ namespace Repository
         public ISellerDocumentRepository SellerDocument => _sellerDocument ??= new SellerDocumentRepository(_repoContext);
         public IWorkRepository Work => _work ??= new WorkRepository(_repoContext);
         public ISellerAddressRepository SellerAddress => _sellerAddress ??= new SellerAddressRepository(_repoContext);
+        public ISellerCommentRepository SellerComment => _sellerComment ??= new SellerCommentRepository(_repoContext);
         public IProductOfferRepository ProductOffer => _productOffer ??= new ProductOfferRepository(_repoContext);
         public ISellerCatProductRepository SellerCatProduct => _sellerCatProduct ??= new SellerCatProductRepository(_repoContext);
         public IProductComissionRepository ProductComission => _productComission ??= new ProductComissionRepository(_repoContext);

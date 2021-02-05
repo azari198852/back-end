@@ -80,6 +80,7 @@ namespace Entities
         public virtual DbSet<Seller> Seller { get; set; }
         public virtual DbSet<SellerAddress> SellerAddress { get; set; }
         public virtual DbSet<SellerCatProduct> SellerCatProduct { get; set; }
+        public virtual DbSet<SellerComment> SellerComment { get; set; }
         public virtual DbSet<SellerDocument> SellerDocument { get; set; }
         public virtual DbSet<SellerStatusLog> SellerStatusLog { get; set; }
         public virtual DbSet<Slider> Slider { get; set; }
@@ -2282,6 +2283,8 @@ namespace Entities
 
             modelBuilder.Entity<Seller>(entity =>
             {
+                entity.ToTable("Seller", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Bdate).HasColumnName("BDate");
@@ -2300,7 +2303,9 @@ namespace Entities
 
                 entity.Property(e => e.FinalStatusId).HasColumnName("FinalStatusID");
 
-                entity.Property(e => e.Fname).HasMaxLength(32);
+                entity.Property(e => e.Fname).HasMaxLength(256);
+
+                entity.Property(e => e.IdentityNo).HasMaxLength(20);
 
                 entity.Property(e => e.LocationId).HasColumnName("LocationID");
 
@@ -2312,7 +2317,7 @@ namespace Entities
 
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
 
-                entity.Property(e => e.Name).HasMaxLength(32);
+                entity.Property(e => e.Name).HasMaxLength(256);
 
                 entity.Property(e => e.ProfileImageHurl)
                     .HasColumnName("ProfileImageHURL")
@@ -2432,6 +2437,50 @@ namespace Entities
                     .WithMany(p => p.SellerCatProduct)
                     .HasForeignKey(d => d.SellerId)
                     .HasConstraintName("FK_SellerCatProduct_Seller");
+            });
+
+            modelBuilder.Entity<SellerComment>(entity =>
+            {
+                entity.ToTable("SellerComment", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.AuthorName).HasMaxLength(512);
+
+                entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.CommentType).HasComment(@"1 = Bio
+ 2 = Comment About Shop");
+
+                entity.Property(e => e.CuserId).HasColumnName("CUserID");
+
+                entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
+
+                entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.FinalStatusId).HasColumnName("FinalStatusID");
+
+                entity.Property(e => e.Mdate).HasColumnName("MDate");
+
+                entity.Property(e => e.MetaDescription).HasMaxLength(2048);
+
+                entity.Property(e => e.MetaTitle).HasMaxLength(1024);
+
+                entity.Property(e => e.MuserId).HasColumnName("MUserID");
+
+                entity.Property(e => e.SellerId).HasColumnName("SellerID");
+
+                entity.HasOne(d => d.FinalStatus)
+                    .WithMany(p => p.SellerComment)
+                    .HasForeignKey(d => d.FinalStatusId)
+                    .HasConstraintName("FK_SellerComment_Status");
+
+                entity.HasOne(d => d.Seller)
+                    .WithMany(p => p.SellerComment)
+                    .HasForeignKey(d => d.SellerId)
+                    .HasConstraintName("FK_SellerComment_Seller");
             });
 
             modelBuilder.Entity<SellerDocument>(entity =>

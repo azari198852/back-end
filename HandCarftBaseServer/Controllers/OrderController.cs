@@ -239,7 +239,7 @@ namespace HandCarftBaseServer.Controllers
                         ProductCode = product.Coding,
                         ProductName = product.Name,
                         ProductPrice = product.Price,
-                        ProductOfferId = c.OfferId,
+                        ProductOfferId = ofer?.Id,
                         ProductOfferCode = ofer?.Offer.OfferCode,
                         ProductOfferPrice = (long?)(ofer != null ? (ofer.Value / 100 * product.Price) : 0),
                         ProductOfferValue = ofer?.Value,
@@ -302,7 +302,7 @@ namespace HandCarftBaseServer.Controllers
                 }
 
 
-                customerOrder.FinalPrice = customerOrder.OrderPrice + customerOrder.PostServicePrice;
+                customerOrder.FinalPrice = customerOrder.OrderPrice - customerOrder.OfferPrice + customerOrder.PostServicePrice;
                 var finalres = SingleResult<OrderPreViewResultDto>.GetSuccessfulResult(customerOrder);
                 _logger.LogData(MethodBase.GetCurrentMethod(), finalres, null, order);
                 return finalres;
@@ -358,7 +358,7 @@ namespace HandCarftBaseServer.Controllers
                         ProductIncreasePrice = null,
                         ProductName = product.Name,
                         ProductPrice = product.Price,
-                        ProductOfferId = c.OfferId,
+                        ProductOfferId = ofer?.Id,
                         ProductOfferCode = ofer?.Offer.OfferCode,
                         ProductOfferPrice = (long?)(ofer != null ? (ofer.Value / 100 * product.Price) : 0),
                         ProductOfferValue = ofer?.Value,
@@ -390,8 +390,7 @@ namespace HandCarftBaseServer.Controllers
                         ((x.PackingPrice + x.ProductPrice - x.ProductOfferPrice) * x.OrderCount))
                 };
 
-                customerOrder.OrderPrice = orerProductList.Sum(c =>
-                    (c.ProductPrice + c.PackingPrice - c.ProductOfferPrice) * c.OrderCount);
+
                 customerOrder.OfferPrice =
                     (long?)(customerOrder.OrderPrice * (offer == null ? 0 : offer.Value / 100));
                 customerOrder.OfferValue = (int?)offer?.Value;

@@ -65,6 +65,7 @@ namespace Contracts
         ISellerAddressRepository SellerAddress { get; }
         IProductOfferRepository ProductOffer { get; }
         ISellerCatProductRepository SellerCatProduct { get; }
+        ISellerCommentRepository SellerComment { get; }
         IProductComissionRepository ProductComission { get; }
         IComissionRepository Comission { get; }
         IDynamicFormsRepository DynamicForms { get; }

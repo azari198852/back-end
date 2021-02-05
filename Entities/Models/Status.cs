@@ -21,6 +21,7 @@ namespace Entities.Models
             ProductStatusLog = new HashSet<ProductStatusLog>();
             Seller = new HashSet<Seller>();
             SellerCatProduct = new HashSet<SellerCatProduct>();
+            SellerComment = new HashSet<SellerComment>();
             SellerDocument = new HashSet<SellerDocument>();
             SellerStatusLog = new HashSet<SellerStatusLog>();
         }
@@ -58,6 +59,7 @@ namespace Entities.Models
         public virtual ICollection<ProductStatusLog> ProductStatusLog { get; set; }
         public virtual ICollection<Seller> Seller { get; set; }
         public virtual ICollection<SellerCatProduct> SellerCatProduct { get; set; }
+        public virtual ICollection<SellerComment> SellerComment { get; set; }
         public virtual ICollection<SellerDocument> SellerDocument { get; set; }
         public virtual ICollection<SellerStatusLog> SellerStatusLog { get; set; }
     }
