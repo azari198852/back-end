@@ -7,6 +7,7 @@ namespace Entities.Models
     {
         public Color()
         {
+            PackingType = new HashSet<PackingType>();
             ProductColor = new HashSet<ProductColor>();
         }
 
@@ -23,6 +24,7 @@ namespace Entities.Models
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
 
+        public virtual ICollection<PackingType> PackingType { get; set; }
         public virtual ICollection<ProductColor> ProductColor { get; set; }
     }
 }

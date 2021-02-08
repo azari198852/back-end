@@ -415,6 +415,8 @@ namespace Entities
 
             modelBuilder.Entity<Color>(entity =>
             {
+                entity.ToTable("Color", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1444,9 +1446,13 @@ namespace Entities
 
             modelBuilder.Entity<PackingType>(entity =>
             {
+                entity.ToTable("PackingType", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.ColorId).HasColumnName("ColorID");
 
                 entity.Property(e => e.CuserId).HasColumnName("CUserID");
 
@@ -1456,15 +1462,24 @@ namespace Entities
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
 
+                entity.Property(e => e.Material).HasMaxLength(128);
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
 
                 entity.Property(e => e.Name).HasMaxLength(128);
+
+                entity.HasOne(d => d.Color)
+                    .WithMany(p => p.PackingType)
+                    .HasForeignKey(d => d.ColorId)
+                    .HasConstraintName("FK_PackingType_Color");
             });
 
             modelBuilder.Entity<PackingTypeImage>(entity =>
             {
+                entity.ToTable("PackingTypeImage", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1478,6 +1493,10 @@ namespace Entities
                 entity.Property(e => e.Decription).HasMaxLength(2048);
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.FileType).HasComment(@"1 = Film
+2 = Image
+");
 
                 entity.Property(e => e.ImageFileUrl)
                     .HasColumnName("ImageFileURL")

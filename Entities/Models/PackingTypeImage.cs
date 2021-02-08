@@ -7,6 +7,7 @@ namespace Entities.Models
     {
         public long Id { get; set; }
         public long? PackingTypeId { get; set; }
+        public long? FileType { get; set; }
         public string Title { get; set; }
         public string Decription { get; set; }
         public string ImageFileUrl { get; set; }

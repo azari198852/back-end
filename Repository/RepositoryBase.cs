@@ -53,5 +53,10 @@ namespace Repository
         {
             this.RepositoryContext.Set<T>().AddRange(entities);
         }
+
+        public virtual void UpdateRange(List<T> entities)
+        {
+            this.RepositoryContext.Set<T>().UpdateRange(entities);
+        }
     }
 }

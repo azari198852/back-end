@@ -325,7 +325,8 @@ namespace HandCarftBaseServer.Controllers
                     res.DaDate = DateTime.Now.Ticks;
                     res.DaUserId = userId;
                 }
-
+                _repository.SellerComment.Update(res);
+                _repository.Save();
                 _logger.LogData(MethodBase.GetCurrentMethod(), General.Results_.SuccessMessage(), null, sellerCommentId);
                 return Ok(General.Results_.SuccessMessage());
             }
