@@ -335,7 +335,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///ثبت سفارش
         /// </summary>
-       // [Authorize]
+        [Authorize]
         [HttpPost]
         [Route("Product/InsertCustomerOrder_UI")]
         public SingleResult<InsertOrderResultDto> GetProductByIdList_UI(OrderModel order)
