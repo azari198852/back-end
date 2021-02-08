@@ -320,7 +320,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///ثبت سفارش
         /// </summary>
-        [Authorize]
+       // [Authorize]
         [HttpPost]
         [Route("Product/InsertCustomerOrder_UI")]
         public SingleResult<InsertOrderResultDto> GetProductByIdList_UI(OrderModel order)
@@ -390,10 +390,24 @@ namespace HandCarftBaseServer.Controllers
                         ((x.PackingPrice + x.ProductPrice - x.ProductOfferPrice) * x.OrderCount))
                 };
 
+                if (offer != null)
+                {
+                    if (offer.Value == 0 || offer.Value == null)
+                    {
+                        customerOrder.OfferPrice = offer.MaximumPrice > customerOrder.OrderPrice
+                            ? customerOrder.OrderPrice
+                            : offer.MaximumPrice;
+                        customerOrder.OfferValue = null;
+                    }
+                    else
+                    {
+                        customerOrder.OfferPrice = (long?)(customerOrder.OrderPrice * (offer.Value / 100));
+                        customerOrder.OfferValue =(int?) offer.Value.Value;
+                    }
 
-                customerOrder.OfferPrice =
-                    (long?)(customerOrder.OrderPrice * (offer == null ? 0 : offer.Value / 100));
-                customerOrder.OfferValue = (int?)offer?.Value;
+                }
+
+
                 customerOrder.OrderDate = DateTime.Now.Ticks;
                 customerOrder.FinalWeight = orerProductList.Sum(x => x.FinalWeight);
                 customerOrder.OrderNo = Convert.ToInt64(orderNo);
@@ -443,7 +457,7 @@ namespace HandCarftBaseServer.Controllers
                 }
 
 
-                customerOrder.FinalPrice = customerOrder.OrderPrice + customerOrder.TaxPrice + customerOrder.PostServicePrice;
+                customerOrder.FinalPrice = customerOrder.OrderPrice - customerOrder.OfferPrice + customerOrder.TaxPrice + customerOrder.PostServicePrice;
                 _repository.CustomerOrder.Create(customerOrder);
 
 
