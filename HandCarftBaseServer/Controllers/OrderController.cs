@@ -262,9 +262,24 @@ namespace HandCarftBaseServer.Controllers
 
                 customerOrder.OrderPrice = orerProductList.Sum(c =>
                     (c.ProductPrice + c.PackingPrice - c.ProductOfferPrice) * c.OrderCount);
-                customerOrder.OfferPrice =
-                    (long?)(customerOrder.OrderPrice * (offer == null ? 0 : offer.Value / 100));
-                customerOrder.OfferValue = (int?)offer?.Value;
+
+
+                if (offer != null)
+                {
+                    if (offer.Value == 0 || offer.Value == null)
+                    {
+                        customerOrder.OfferPrice = offer.MaximumPrice > customerOrder.OrderPrice
+                            ? customerOrder.OrderPrice
+                            : offer.MaximumPrice;
+                        customerOrder.OfferValue = null;
+                    }
+                    else
+                    {
+                        customerOrder.OfferPrice = (long?)(customerOrder.OrderPrice * (offer.Value / 100));
+                        customerOrder.OfferValue = (int?)offer.Value.Value;
+                    }
+
+                }
                 customerOrder.FinalWeight = orerProductList.Sum(x => x.FinalWeight);
                 customerOrder.OrderWeight = customerOrder.FinalWeight;
                 customerOrder.PaymentTypeId = order.PaymentTypeId;
