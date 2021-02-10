@@ -73,6 +73,7 @@ namespace Repository
         private IDynamicFormsRepository _dynamicForms;
         private IDynamiFormImageRepository _dynamiFormImage;
         private ICustomerFavoriteProductsRepository _customerFavoriteProducts;
+        private IEmployeeRepository _employee;
 
 
         public IApiRepository Api => _api ??= new ApiRepository(_repoContext);
@@ -139,6 +140,7 @@ namespace Repository
         public IDynamicFormsRepository DynamicForms => _dynamicForms ??= new DynamicFormsRepository(_repoContext);
         public IDynamiFormImageRepository DynamiFormImage => _dynamiFormImage ??= new DynamiFormImageRepository(_repoContext);
         public ICustomerFavoriteProductsRepository CustomerFavoriteProducts => _customerFavoriteProducts ??= new CustomerFavoriteProductsRepository(_repoContext);
+        public IEmployeeRepository Employee => _employee ??= new EmployeeRepository(_repoContext);
         public RepositoryWrapper(BaseContext repositoryContext)
         {
             _repoContext = repositoryContext;

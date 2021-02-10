@@ -280,6 +280,13 @@ namespace HandCarftBaseServer.Controllers
                     }
 
                 }
+                else
+                {
+
+                    customerOrder.OfferPrice = 0;
+                    customerOrder.OfferValue = null;
+
+                }
                 customerOrder.FinalWeight = orerProductList.Sum(x => x.FinalWeight);
                 customerOrder.OrderWeight = customerOrder.FinalWeight;
                 customerOrder.PaymentTypeId = order.PaymentTypeId;
@@ -335,10 +342,10 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///ثبت سفارش
         /// </summary>
-        [Authorize]
+      //  [Authorize]
         [HttpPost]
         [Route("Product/InsertCustomerOrder_UI")]
-        public SingleResult<InsertOrderResultDto> GetProductByIdList_UI(OrderModel order)
+        public SingleResult<InsertOrderResultDto> InsertCustomerOrder_UI(OrderModel order)
         {
             try
             {
@@ -417,8 +424,15 @@ namespace HandCarftBaseServer.Controllers
                     else
                     {
                         customerOrder.OfferPrice = (long?)(customerOrder.OrderPrice * (offer.Value / 100));
-                        customerOrder.OfferValue =(int?) offer.Value.Value;
+                        customerOrder.OfferValue = (int?)offer.Value.Value;
                     }
+
+                }
+                else
+                {
+
+                    customerOrder.OfferPrice = 0;
+                    customerOrder.OfferValue = null;
 
                 }
 

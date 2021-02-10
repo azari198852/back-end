@@ -43,6 +43,8 @@ namespace Logger
             public static XError FailedPayment() => new XError(4005, "پرداخت نا موفق");
             public static XError InvalidOrderProductStatus() => new XError(4006, "وضعیت فعلی قابل تغییر به وضعیت انتخابی نیست");
             public static XError HaveChild() => new XError(4007, "این رکورد در جای دیگری از سیستم استفاده شده است");
+            public static XError FormNotSelected() => new XError(4008, "دسترسی انتخاب نشده است");
+            public static XError RoleNotSelected() => new XError(4009, "نقشی انتخاب نشده است");
 
         }
 

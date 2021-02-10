@@ -15,6 +15,10 @@ namespace Entities.Models
         public long? RoleId { get; set; }
         public long? StartDate { get; set; }
         public long? ExpDate { get; set; }
+        public bool? InsertRule { get; set; }
+        public bool? UpdateRule { get; set; }
+        public bool? DeleteRule { get; set; }
+        public bool? ViewRule { get; set; }
         public long? CuserId { get; set; }
         public long? Cdate { get; set; }
         public long? DuserId { get; set; }
