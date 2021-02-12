@@ -545,7 +545,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///پرداخت مبلغ سفارش با آیدی سفارش
         /// </summary>
-      //  [Authorize]
+        [Authorize]
         [HttpGet]
         [Route("CustomerOrderPayment/MakePaymentByOrderId")]
         public SingleResult<string> MakePaymentByOrderId(long customerOrderId)
@@ -730,7 +730,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///لیست سفارشات مشتری 
         /// </summary>
-     //   [Authorize]
+        [Authorize]
         [HttpGet]
         [Route("CustomerOrder/GetCustomerOrderList_UI")]
         public ListResult<CustomerOrderDto> GetCustomerOrderList_UI(long? finalStatusId)
