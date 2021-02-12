@@ -45,6 +45,9 @@ namespace Logger
             public static XError HaveChild() => new XError(4007, "این رکورد در جای دیگری از سیستم استفاده شده است");
             public static XError FormNotSelected() => new XError(4008, "دسترسی انتخاب نشده است");
             public static XError RoleNotSelected() => new XError(4009, "نقشی انتخاب نشده است");
+            public static XError InvalidPackingType() => new XError(4010, "بسته بندی انخابی وچد ندارد یا فاقد موجودی می باشد");
+
+
 
         }
 

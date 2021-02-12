@@ -34,6 +34,7 @@ namespace Entities
         public virtual DbSet<CustomerOrder> CustomerOrder { get; set; }
         public virtual DbSet<CustomerOrderPayment> CustomerOrderPayment { get; set; }
         public virtual DbSet<CustomerOrderProduct> CustomerOrderProduct { get; set; }
+        public virtual DbSet<CustomerWalletCharge> CustomerWalletCharge { get; set; }
         public virtual DbSet<CustomerOrderProductStatusLog> CustomerOrderProductStatusLog { get; set; }
         public virtual DbSet<CustomerOrderStatusLog> CustomerOrderStatusLog { get; set; }
         public virtual DbSet<CustomerStatusLog> CustomerStatusLog { get; set; }
@@ -72,6 +73,7 @@ namespace Entities
         public virtual DbSet<ProductOffer> ProductOffer { get; set; }
         public virtual DbSet<ProductPackingType> ProductPackingType { get; set; }
         public virtual DbSet<ProductPackingTypeImage> ProductPackingTypeImage { get; set; }
+        public virtual DbSet<ProductPackingTypeList> ProductPackingTypeList { get; set; }
         public virtual DbSet<ProductStatusLog> ProductStatusLog { get; set; }
         public virtual DbSet<RelatedProduct> RelatedProduct { get; set; }
         public virtual DbSet<Role> Role { get; set; }
@@ -469,6 +471,8 @@ namespace Entities
 
             modelBuilder.Entity<Customer>(entity =>
             {
+                entity.ToTable("Customer", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Bdate).HasColumnName("BDate");
@@ -990,6 +994,42 @@ namespace Entities
                     .WithMany(p => p.CustomerStatusLog)
                     .HasForeignKey(d => d.StatusId)
                     .HasConstraintName("FK_CustomerStatusLog_Status");
+            });
+
+            modelBuilder.Entity<CustomerWalletCharge>(entity =>
+            {
+                entity.ToTable("CustomerWalletCharge", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.BankCard).HasMaxLength(256);
+
+                entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.CuserId).HasColumnName("CUserID");
+
+                entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+
+                entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
+
+                entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.FinalStatusId).HasColumnName("FinalStatusID");
+
+                entity.Property(e => e.Mdate).HasColumnName("MDate");
+
+                entity.Property(e => e.MuserId).HasColumnName("MUserID");
+
+                entity.Property(e => e.RefNum).HasMaxLength(256);
+
+                entity.Property(e => e.TraceNo).HasMaxLength(512);
+
+                entity.HasOne(d => d.Customer)
+                    .WithMany(p => p.CustomerWalletCharge)
+                    .HasForeignKey(d => d.CustomerId)
+                    .HasConstraintName("FK_CustomerWalletCharge_Customer");
             });
 
             modelBuilder.Entity<Document>(entity =>
@@ -2062,6 +2102,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductPackingType>(entity =>
             {
+                entity.ToTable("ProductPackingType", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2082,6 +2124,8 @@ namespace Entities
 
                 entity.Property(e => e.ProductId).HasColumnName("ProductID");
 
+                entity.Property(e => e.ProductPackingTypeListId).HasColumnName("ProductPackingTypeListID");
+
                 entity.HasOne(d => d.PackinggType)
                     .WithMany(p => p.ProductPackingType)
                     .HasForeignKey(d => d.PackinggTypeId)
@@ -2091,10 +2135,17 @@ namespace Entities
                     .WithMany(p => p.ProductPackingType)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_ProductPackingType_Product");
+
+                entity.HasOne(d => d.ProductPackingTypeList)
+                    .WithMany(p => p.ProductPackingType)
+                    .HasForeignKey(d => d.ProductPackingTypeListId)
+                    .HasConstraintName("FK_ProductPackingType_ProductPackingTypeList");
             });
 
             modelBuilder.Entity<ProductPackingTypeImage>(entity =>
             {
+                entity.ToTable("ProductPackingTypeImage", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2125,6 +2176,29 @@ namespace Entities
                     .WithMany(p => p.ProductPackingTypeImage)
                     .HasForeignKey(d => d.ProductPackingTypeId)
                     .HasConstraintName("FK_ProductPackingTypeImage_ProductPackingType");
+            });
+
+            modelBuilder.Entity<ProductPackingTypeList>(entity =>
+            {
+                entity.ToTable("ProductPackingTypeList", "dbo");
+
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.CuserId).HasColumnName("CUserID");
+
+                entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
+
+                entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.Mdate).HasColumnName("MDate");
+
+                entity.Property(e => e.MuserId).HasColumnName("MUserID");
+
+                entity.Property(e => e.Title).HasMaxLength(256);
             });
 
             modelBuilder.Entity<ProductStatusLog>(entity =>

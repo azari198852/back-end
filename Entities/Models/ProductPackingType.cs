@@ -11,6 +11,7 @@ namespace Entities.Models
         }
 
         public long Id { get; set; }
+        public long? ProductPackingTypeListId { get; set; }
         public long? ProductId { get; set; }
         public long? PackinggTypeId { get; set; }
         public long? Price { get; set; }
@@ -26,6 +27,7 @@ namespace Entities.Models
 
         public virtual PackingType PackinggType { get; set; }
         public virtual Product Product { get; set; }
+        public virtual ProductPackingTypeList ProductPackingTypeList { get; set; }
         public virtual ICollection<ProductPackingTypeImage> ProductPackingTypeImage { get; set; }
     }
 }

@@ -72,6 +72,8 @@ namespace Contracts
         IDynamiFormImageRepository DynamiFormImage { get; }
         ICustomerFavoriteProductsRepository CustomerFavoriteProducts { get; }
         IEmployeeRepository Employee { get; }
+        IProductPackingTypeListRepository ProductPackingTypeList { get; }
+
         void Save();
     }
 }

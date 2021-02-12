@@ -12,6 +12,7 @@ namespace Entities.Models
             CustomerOffer = new HashSet<CustomerOffer>();
             CustomerOrder = new HashSet<CustomerOrder>();
             CustomerStatusLog = new HashSet<CustomerStatusLog>();
+            CustomerWalletCharge = new HashSet<CustomerWalletCharge>();
             InversePresenterCustomer = new HashSet<Customer>();
             ProductCustomerRate = new HashSet<ProductCustomerRate>();
         }
@@ -60,6 +61,7 @@ namespace Entities.Models
         public virtual ICollection<CustomerOffer> CustomerOffer { get; set; }
         public virtual ICollection<CustomerOrder> CustomerOrder { get; set; }
         public virtual ICollection<CustomerStatusLog> CustomerStatusLog { get; set; }
+        public virtual ICollection<CustomerWalletCharge> CustomerWalletCharge { get; set; }
         public virtual ICollection<Customer> InversePresenterCustomer { get; set; }
         public virtual ICollection<ProductCustomerRate> ProductCustomerRate { get; set; }
     }

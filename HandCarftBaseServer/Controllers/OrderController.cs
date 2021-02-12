@@ -342,7 +342,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///ثبت سفارش
         /// </summary>
-      //  [Authorize]
+        [Authorize]
         [HttpPost]
         [Route("Product/InsertCustomerOrder_UI")]
         public SingleResult<InsertOrderResultDto> InsertCustomerOrder_UI(OrderModel order)
@@ -636,6 +636,10 @@ namespace HandCarftBaseServer.Controllers
                     orderpeymnt.TransactionDate = DateTime.Now.Ticks;
                     orderpeymnt.CardPan = result.card_pan;
                     _repository.CustomerOrderPayment.Update(orderpeymnt);
+                    var order = _repository.CustomerOrder.FindByCondition(c => c.Id == customerOrderId)
+                        .FirstOrDefault();
+                    order.FinalStatusId = 27;
+                    _repository.CustomerOrder.Update(order);
 
                     var sendSms = new SendSMS();
                     sendSms.SendSuccessOrderPayment(customer.Mobile.Value, orderpeymnt.OrderNo, orderpeymnt.PaymentPrice.Value);
@@ -726,7 +730,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///لیست سفارشات مشتری 
         /// </summary>
-        [Authorize]
+     //   [Authorize]
         [HttpGet]
         [Route("CustomerOrder/GetCustomerOrderList_UI")]
         public ListResult<CustomerOrderDto> GetCustomerOrderList_UI(long? finalStatusId)

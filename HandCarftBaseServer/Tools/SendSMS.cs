@@ -121,6 +121,41 @@ namespace HandCarftBaseServer.Tools
 
         }
 
+        public string SendWalletActivationSms(long mobileNo, int code)
+        {
+
+            var smsText = "کد تایید شما برای تغییر رمز در سایت ";
+            smsText += "tabrizhandicrafts.com";
+            smsText += "\\n";
+            smsText += "";
+            smsText += code.ToString();
+            smsText += " می باشد.";
+
+            var mob = "0" + mobileNo.ToString();
+
+
+            var client = new RestClient("http://188.0.240.110/api/select");
+            var request = new RestRequest(Method.POST);
+            request.AddHeader("cache-control", "no-cache");
+            request.AddHeader("Content-Type", "application/json");
+            request.AddParameter("undefined", "{\"op\" : \"patternV2\"" +
+                                              ",\"user\" : \"09144198583\"" +
+                                              ",\"pass\":  \"1375989081\"" +
+                                              ",\"fromNum\" : \"+983000505\"" +
+                                              $",\"toNum\": \"{mob}\"" +
+                                              ",\"patternCode\": \"u6qmhwhh1h\"" +
+                                              ",\"inputData\" : {\"verification-code\":" + $"\"{code}\"" + "}}"
+                , ParameterType.RequestBody);
+
+
+            IRestResponse response = client.Execute(request);
+            var a = "ErrorMessage:" + response.ErrorMessage + " Content: " + response.Content + " StatusCode:" +
+                    response.StatusCode;
+            return a;
+
+
+        }
+
         public bool SendOrderSmsForSeller(long mobileNo)
         {
 
