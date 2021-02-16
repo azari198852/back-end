@@ -47,25 +47,34 @@ namespace HandCarftBaseServer.ServiceProvider.ZarinPal
 
         public ZarinPalVerifyResponse VerifyPayment(ZarinPalVerifyRequest verifyRequest)
         {
-            verifyRequest.merchant_id = merchant_id;
-            var body = JsonSerializer.Serialize(verifyRequest);
-            var client = new RestClient("https://api.zarinpal.com/pg/v4/payment/verify.json");
-            var request = new RestRequest(Method.POST);
-            request.AddJsonBody(body);
+            try
+            {
+                verifyRequest.merchant_id = merchant_id;
+                var body = JsonSerializer.Serialize(verifyRequest);
+                var client = new RestClient("https://api.zarinpal.com/pg/v4/payment/verify.json");
+                var request = new RestRequest(Method.POST);
+                request.AddJsonBody(body);
 
-            IRestResponse response = client.Execute(request);
-            var data = ((Newtonsoft.Json.Linq.JContainer)JObject.Parse(response.Content).First).First.ToString();
-            var error = ((Newtonsoft.Json.Linq.JContainer)JObject.Parse(response.Content).First).Next.First.ToString();
-            if (data == "[]")
-            {
-                var result = JsonSerializer.Deserialize<ZarinPalVerifyResponse>(error);
-                return result;
+                IRestResponse response = client.Execute(request);
+                var data = ((Newtonsoft.Json.Linq.JContainer)JObject.Parse(response.Content).First).First.ToString();
+                var error = ((Newtonsoft.Json.Linq.JContainer)JObject.Parse(response.Content).First).Next.First.ToString();
+                if (data == "[]")
+                {
+                    var result = JsonSerializer.Deserialize<ZarinPalVerifyResponse>(error);
+                    return result;
+                }
+                else
+                {
+                    var result = JsonSerializer.Deserialize<ZarinPalVerifyResponse>(data);
+                    return result;
+                }
             }
-            else
+            catch (Exception e)
             {
-                var result = JsonSerializer.Deserialize<ZarinPalVerifyResponse>(data);
-                return result;
+               
+                throw e;
             }
+           
 
         }
 

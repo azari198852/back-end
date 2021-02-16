@@ -662,7 +662,7 @@ namespace HandCarftBaseServer.Controllers
         /// <summary>
         ///استعلام پرداخت از بانک
         /// </summary>
-        [Authorize]
+      //  [Authorize]
         [HttpGet]
         [Route("CustomerOrderPayment/VerifyPayment_UI")]
         public SingleResult<string> VerifyPayment(string authority, string status)
