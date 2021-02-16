@@ -653,11 +653,13 @@ namespace HandCarftBaseServer.Controllers
 
 
                 var finalresult = SingleResult<ProductListDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, filter);
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), filter);
                 return SingleResult<ProductListDto>.GetFailResult(null);
 
             }
@@ -707,11 +709,13 @@ namespace HandCarftBaseServer.Controllers
                 var result = _mapper.Map<List<ProductDto>>(res);
 
                 var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
                 return ListResult<ProductDto>.GetFailResult(null);
 
             }
@@ -731,11 +735,13 @@ namespace HandCarftBaseServer.Controllers
                 var result = _mapper.Map<List<ProductDto>>(res);
 
                 var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
                 return ListResult<ProductDto>.GetFailResult(null);
 
             }
@@ -755,11 +761,14 @@ namespace HandCarftBaseServer.Controllers
 
                 var result = _mapper.Map<List<ProductColorDto>>(res);
                 var finalresult = ListResult<ProductColorDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, productId);
+
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), productId);
                 return ListResult<ProductColorDto>.GetFailResult(null);
 
             }
@@ -780,11 +789,14 @@ namespace HandCarftBaseServer.Controllers
 
                 var result = _mapper.Map<List<ProductPackingTypeDto>>(res);
                 var finalresult = ListResult<ProductPackingTypeDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, productId);
+
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), productId);
                 return ListResult<ProductPackingTypeDto>.GetFailResult(null);
 
             }
@@ -805,11 +817,14 @@ namespace HandCarftBaseServer.Controllers
 
 
                 var finalresult = ListResult<Product>.GetSuccessfulResult(res);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, productId);
+
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), productId);
                 return ListResult<Product>.GetFailResult(null);
 
             }
@@ -829,11 +844,14 @@ namespace HandCarftBaseServer.Controllers
                 var result = _mapper.Map<List<ProductParamDto>>(res);
 
                 var finalresult = ListResult<ProductParamDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, productId);
+
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), productId);
                 return ListResult<ProductParamDto>.GetFailResult(null);
 
             }
@@ -861,11 +879,14 @@ namespace HandCarftBaseServer.Controllers
                 var result = _mapper.Map<List<ProductDto>>(res);
 
                 var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, catProductId);
+
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), catProductId);
                 return ListResult<ProductDto>.GetFailResult(null);
 
             }
@@ -886,11 +907,14 @@ namespace HandCarftBaseServer.Controllers
 
                 var result = _mapper.Map<List<ProductDto>>(res);
                 var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
+
                 return ListResult<ProductDto>.GetFailResult(null);
 
             }
@@ -911,11 +935,15 @@ namespace HandCarftBaseServer.Controllers
 
                 var result = _mapper.Map<List<ProductCustomerRateDto>>(res);
                 var finalresult = ListResult<ProductCustomerRateDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, productId);
+
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), productId);
+
                 return ListResult<ProductCustomerRateDto>.GetFailResult(null);
 
             }
@@ -943,12 +971,15 @@ namespace HandCarftBaseServer.Controllers
                 product.SeenCount += 1;
                 _repository.Product.Update(product);
                 _repository.Save();
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, productId);
 
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), productId);
+
                 return SingleResult<ProductDto>.GetFailResult(null);
 
             }
@@ -969,11 +1000,15 @@ namespace HandCarftBaseServer.Controllers
                 var result = _mapper.Map<List<ProductDto>>(res);
 
                 var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, productIdList);
+
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), productIdList);
+
                 return ListResult<ProductDto>.GetFailResult(null);
 
             }
@@ -1005,11 +1040,15 @@ namespace HandCarftBaseServer.Controllers
                 var result = _mapper.Map<List<ProductGeneralSearchResultDto>>(res);
                 var resss = result.Union(res1).ToList();
                 var finalresult = ListResult<ProductGeneralSearchResultDto>.GetSuccessfulResult(resss, resss.Count);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null, name);
+
                 return finalresult;
 
             }
             catch (Exception e)
             {
+                _logger.LogError(e, MethodBase.GetCurrentMethod(), name);
+
                 return ListResult<ProductGeneralSearchResultDto>.GetFailResult(null);
 
             }
@@ -1030,6 +1069,73 @@ namespace HandCarftBaseServer.Controllers
                     .FindByCondition(c =>
                         c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8 &&
                         c.ProductOffer.Any(x => x.FromDate < time && time < x.ToDate)).Include(c => c.ProductOffer)
+                    .Select(c => new
+                    {
+                        c.Id,
+
+                        offerValue = (c.Price * (c.ProductOffer.Where(x => x.FromDate < time && time < x.ToDate).Max(v => v.Value))) / 100
+                    }).OrderByDescending(c => c.offerValue).Take(10).ToList().Select(c => c.Id).ToList();
+                var res = _repository.Product.GetProductListFullInfo().Where(c => productList.Contains(c.Id)).ToList();
+                // var res = _repository.Product.GetProductListFullInfo().ToList();
+                //.OrderByDescending(c => c.).Take(10).ToList();
+                var result = _mapper.Map<List<ProductDto>>(res);
+                //var result = new List<ProductDto>();
+                var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result.OrderByDescending(c => c.OfferAmount).ToList());
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
+                return finalresult;
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
+                return ListResult<ProductDto>.GetFailResult(null);
+
+            }
+        }
+
+        /// <summary>
+        ///لیست 10 محصولی دسته بندی خاص
+        /// </summary>
+        [HttpGet]
+        [Route("Product/GetProductList_special_UI")]
+        public ListResult<ProductDto> GetProductList_special_UI()
+        {
+            try
+            {
+
+                var res = _repository.Product.GetProductListFullInfo().Where(c => c.CatProductId == 20).OrderBy(c => Guid.NewGuid()).Take(10)
+                    .ToList();
+
+                var result = _mapper.Map<List<ProductDto>>(res);
+                var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
+                return finalresult;
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
+
+                return ListResult<ProductDto>.GetFailResult(null);
+
+            }
+        }
+
+        /// <summary>
+        ///لیست 10 محصول که تایمر تخفیف  دارند
+        /// </summary>
+        [HttpGet]
+        [Route("Product/GetProductList_HaveOfferTimer")]
+        public ListResult<ProductDto> GetProductList_HaveOfferTimer()
+        {
+            try
+            {
+
+                var time = DateTime.Now.Ticks;
+                var productList = _repository.Product
+                    .FindByCondition(c =>
+                        c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8 &&
+                        c.ProductOffer.Any(x => x.FromDate < time && time < x.ToDate && x.Offer.HaveTimer == true)).Include(c => c.ProductOffer).ThenInclude(c => c.Offer)
                     .Select(c => new
                     {
                         c.Id,

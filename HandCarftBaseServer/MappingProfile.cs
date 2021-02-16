@@ -140,12 +140,18 @@ namespace HandCarftBaseServer
                 .ForMember(u => u.OfferAmount, opt => opt.MapFrom(x =>
                     (x.ProductOffer
                         .Where(c => c.FromDate < now && now < c.ToDate && c.DaDate == null &&
-                                    c.Ddate == null).Select(c => c.Value).DefaultIfEmpty(0).FirstOrDefault()) * x.Price / 100))
+                                    c.Ddate == null).Select(c => c.Value).DefaultIfEmpty(0).FirstOrDefault()) *
+                    x.Price / 100))
                 .ForMember(u => u.PriceAftterOffer, opt => opt.MapFrom(x =>
                     x.Price - ((x.ProductOffer
                                    .Where(c => c.FromDate < now && now < c.ToDate && c.DaDate == null &&
-                                               c.Ddate == null).Select(c => c.Value).DefaultIfEmpty(0).FirstOrDefault()) * x.Price /
-                               100)));
+                                               c.Ddate == null).Select(c => c.Value).DefaultIfEmpty(0)
+                                   .FirstOrDefault()) * x.Price /
+                               100)))
+                .ForMember(u => u.OfferDeadLine, opt => opt.MapFrom(x =>
+                    x.ProductOffer
+                        .Where(c => c.FromDate < now && now < c.ToDate && c.DaDate == null &&
+                                    c.Ddate == null).Select(c =>new DateTime(c.ToDate.Value)).FirstOrDefault()));
 
             CreateMap<Product, ProductGeneralSearchResultDto>()
                 .ForMember(u => u.ProductId, opt => opt.MapFrom(x => x.Id))

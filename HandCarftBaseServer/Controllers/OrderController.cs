@@ -732,7 +732,7 @@ namespace HandCarftBaseServer.Controllers
                     _repository.Save();
 
                     var finalres = SingleResult<string>.GetSuccessfulResult("عملیات پرداخت با موفقیت انجام شد.");
-                    _logger.LogData(MethodBase.GetCurrentMethod(), finalres, null, customerOrderId);
+                    _logger.LogData(MethodBase.GetCurrentMethod(), finalres, null, authority, status);
                     return finalres;
 
 

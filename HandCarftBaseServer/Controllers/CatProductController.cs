@@ -514,6 +514,56 @@ namespace HandCarftBaseServer.Controllers
 
         }
 
+        /// <summary>
+        ///لیست 5 دسته بندی  که محصولی با نشان یونسکو دارند 
+        /// </summary>
+        [HttpGet]
+        [Route("CatProduct/GetCatProductList_HaveUnesco_UI")]
+        public ListResult<CatProductWithCountDto> GetCatProductList_HaveUnesco_UI()
+        {
+            try
+            {
+                var catProduct = _repository.CatProduct.FindByCondition(c => c.DaDate == null && c.Ddate == null && c.Product.Any(x => x.UnescoFlag == true && x.DaDate==null && x.Ddate==null && x.FinalStatusId==8)).Take(5).ToList();
+                var result = _mapper.Map<List<CatProductWithCountDto>>(catProduct);
+                var finalresult = ListResult<CatProductWithCountDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
+                return finalresult;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
+                return ListResult<CatProductWithCountDto>.GetFailResult(null);
+            }
+
+
+
+        }
+
+        /// <summary>
+        ///لیست 5 دسته بندی  که محصولی با نشان ملی دارند 
+        /// </summary>
+        [HttpGet]
+        [Route("CatProduct/GetCatProductList_MelliFlag_UI")]
+        public ListResult<CatProductWithCountDto> GetCatProductList_MelliFlag_UI()
+        {
+            try
+            {
+                var catProduct = _repository.CatProduct.FindByCondition(c => c.DaDate == null && c.Ddate == null && c.Product.Any(x => x.MelliFlag == true && x.DaDate == null && x.Ddate == null && x.FinalStatusId == 8)).Take(5).ToList();
+                var result = _mapper.Map<List<CatProductWithCountDto>>(catProduct);
+                var finalresult = ListResult<CatProductWithCountDto>.GetSuccessfulResult(result);
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
+                return finalresult;
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
+                return ListResult<CatProductWithCountDto>.GetFailResult(null);
+            }
+
+
+
+        }
+
         #endregion
 
 

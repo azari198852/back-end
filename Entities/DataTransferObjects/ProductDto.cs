@@ -20,6 +20,7 @@ namespace Entities.DataTransferObjects
         public long? PriceAftterOffer { get; set; }
         public int? OfferPercent { get; set; }
         public long? OfferAmount { get; set; }
+        public DateTime? OfferDeadLine { get; set; }
         public long? Count { get; set; }
         public string CoverImageUrl { get; set; }
         public string CoverImageHurl { get; set; }
