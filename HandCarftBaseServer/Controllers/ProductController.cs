@@ -461,8 +461,8 @@ namespace HandCarftBaseServer.Controllers
                                                                       (filter.ProductIds.Contains(c.Id) || filter.ProductIds.Count == 0) &&
                                                                       (filter.FromPrice <= c.Price || filter.FromPrice == null) &&
                                                                       (filter.ToPrice >= c.Price || filter.ToPrice == null))
-                                                                      .Include(c => c.CatProduct).Include(c => c.Seller).Include(c=>c.ProductOffer)
-                                                                      .Select(c => new { c.Id, c.Name, c.Coding, c.Count, CatProduct = c.CatProduct.Name, Seller = c.Seller.Name + " " + c.Seller.Fname, c.Price ,OfferCount=c.ProductOffer.Count})
+                                                                      .Include(c => c.CatProduct).Include(c => c.Seller).Include(c => c.ProductOffer)
+                                                                      .Select(c => new { c.Id, c.Name, c.Coding, c.Count, CatProduct = c.CatProduct.Name, Seller = c.Seller.Name + " " + c.Seller.Fname, c.Price, OfferCount = c.ProductOffer.Count })
                                                                       .OrderByDescending(c => c.Id).AsNoTracking().ToList();
                 _logger.LogData(MethodBase.GetCurrentMethod(), result, null, filter);
                 return Ok(result);
@@ -986,14 +986,64 @@ namespace HandCarftBaseServer.Controllers
                     return ListResult<ProductGeneralSearchResultDto>.GetSuccessfulResult(null);
 
                 var res = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.Name.Contains(name)).Include(c => c.CatProduct).ToList();
+                var res1 = _repository.CatProduct
+                    .FindByCondition(c => c.DaDate == null && c.Ddate == null && c.Name.Contains(name)).Select(c =>
+                        new ProductGeneralSearchResultDto
+                        {
+                            CatProductCode = c.Coding.Value,
+                            CatProductId = c.Id,
+                            CatProductName = c.Name,
+                            ProductId = -1,
+                            ProductName = ""
+                        }).ToList();
                 var result = _mapper.Map<List<ProductGeneralSearchResultDto>>(res);
-                var finalresult = ListResult<ProductGeneralSearchResultDto>.GetSuccessfulResult(result, result.Count);
+                var resss = result.Union(res1).ToList();
+                var finalresult = ListResult<ProductGeneralSearchResultDto>.GetSuccessfulResult(resss, resss.Count);
                 return finalresult;
 
             }
             catch (Exception e)
             {
                 return ListResult<ProductGeneralSearchResultDto>.GetFailResult(null);
+
+            }
+        }
+
+        /// <summary>
+        ///لیست 10 محصول که بیشترین تخفیف را دارند
+        /// </summary>
+        [HttpGet]
+        [Route("Product/GetProductList_HaveMostOffer")]
+        public ListResult<ProductDto> GetProductList_HaveMostOffer()
+        {
+            try
+            {
+
+                var time = DateTime.Now.Ticks;
+                var productList = _repository.Product
+                    .FindByCondition(c =>
+                        c.Ddate == null && c.DaDate == null &&
+                        c.ProductOffer.Any(x => x.FromDate < time && time < x.ToDate)).Include(c => c.ProductOffer)
+                    .Select(c => new
+                    {
+                        c.Id,
+
+                        offerValue = (c.Price * (c.ProductOffer.Where(x => x.FromDate < time && time < x.ToDate).Max(v => v.Value))) / 100
+                    }).OrderByDescending(c => c.offerValue).Take(10).ToList().Select(c => c.Id).ToList();
+                var res = _repository.Product.GetProductListFullInfo().Where(c => productList.Contains(c.Id)).ToList();
+                // var res = _repository.Product.GetProductListFullInfo().ToList();
+                //.OrderByDescending(c => c.).Take(10).ToList();
+                var result = _mapper.Map<List<ProductDto>>(res);
+                //var result = new List<ProductDto>();
+                var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result.OrderByDescending(c=>c.OfferAmount).ToList());
+                _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
+                return finalresult;
+
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, MethodBase.GetCurrentMethod());
+                return ListResult<ProductDto>.GetFailResult(null);
 
             }
         }

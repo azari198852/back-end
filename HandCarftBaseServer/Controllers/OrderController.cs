@@ -489,49 +489,108 @@ namespace HandCarftBaseServer.Controllers
                 customerOrder.FinalPrice = customerOrder.OrderPrice - customerOrder.OfferPrice + customerOrder.TaxPrice + customerOrder.PostServicePrice;
                 _repository.CustomerOrder.Create(customerOrder);
 
-
-
-                var request = new ZarinPallRequest
+                if (customerOrder.FinalPrice > 0)
                 {
-                    //  amount = (int)((customerOrder.FinalPrice.Value + customerOrder.PostServicePrice) * 10),
-                    amount = (int)((customerOrder.FinalPrice.Value) * 10),
-                    description = "order NO: " + customerOrder.OrderNo,
-                    metadata = new ZarinPalRequestMetaData
+
+                    var request = new ZarinPallRequest
                     {
-                        mobile = "0" + cc.Mobile.ToString(),
-                        email = cc.Email
-                    }
-                };
-                var zarinPal = new ZarinPal();
-                var res = zarinPal.Request(request);
+                        //  amount = (int)((customerOrder.FinalPrice.Value + customerOrder.PostServicePrice) * 10),
+                        amount = (int) ((customerOrder.FinalPrice.Value) * 10),
+                        description = "order NO: " + customerOrder.OrderNo,
+                        metadata = new ZarinPalRequestMetaData
+                        {
+                            mobile = "0" + cc.Mobile.ToString(),
+                            email = cc.Email
+                        }
+                    };
+                    var zarinPal = new ZarinPal();
+                    var res = zarinPal.Request(request);
 
-                var customerOrderPayment = new CustomerOrderPayment
+                    var customerOrderPayment = new CustomerOrderPayment
+                    {
+                        OrderNo = customerOrder.OrderNo.ToString(),
+                        TraceNo = res.authority,
+                        TransactionPrice = customerOrder.FinalPrice,
+                        TransactionDate = DateTime.Now.Ticks,
+                        Cdate = DateTime.Now.Ticks,
+                        CuserId = userId,
+                        PaymentPrice = customerOrder.FinalPrice,
+                        FinalStatusId = 26
+
+                    };
+                    customerOrder.CustomerOrderPayment.Add(customerOrderPayment);
+                    _repository.Save();
+
+                    var result = new InsertOrderResultDto
+                    {
+                        OrderNo = customerOrder.OrderNo,
+                        CustomerOrderId = customerOrder.Id,
+                        BankUrl = "https://www.zarinpal.com/pg/StartPay/" + res.authority,
+                        RedirectToBank = true,
+                        PostPrice = customerOrder.PostServicePrice
+                    };
+                    var finalres = SingleResult<InsertOrderResultDto>.GetSuccessfulResult(result);
+                    _logger.LogData(MethodBase.GetCurrentMethod(), finalres, null, order);
+                    return finalres;
+                }
+                else
                 {
-                    OrderNo = customerOrder.OrderNo.ToString(),
-                    TraceNo = res.authority,
-                    TransactionPrice = customerOrder.FinalPrice,
-                    TransactionDate = DateTime.Now.Ticks,
-                    Cdate = DateTime.Now.Ticks,
-                    CuserId = userId,
-                    PaymentPrice = customerOrder.FinalPrice,
-                    FinalStatusId = 26
+                    var customerOrderPayment = new CustomerOrderPayment
+                    {
+                        OrderNo = customerOrder.OrderNo.ToString(),
+                        TraceNo = "پرداخت رایگان",
+                        TransactionPrice = customerOrder.FinalPrice,
+                        TransactionDate = DateTime.Now.Ticks,
+                        Cdate = DateTime.Now.Ticks,
+                        CuserId = userId,
+                        PaymentPrice = customerOrder.FinalPrice,
+                        FinalStatusId = 24
 
-                };
-                customerOrder.CustomerOrderPayment.Add(customerOrderPayment);
-                _repository.Save();
+                    };
+                    customerOrder.CustomerOrderPayment.Add(customerOrderPayment);
 
-                var result = new InsertOrderResultDto
-                {
-                    OrderNo = customerOrder.OrderNo,
-                    CustomerOrderId = customerOrder.Id,
-                    BankUrl = "https://www.zarinpal.com/pg/StartPay/" + res.authority,
-                    RedirectToBank = true,
-                    PostPrice = customerOrder.PostServicePrice
-                };
-                var finalres = SingleResult<InsertOrderResultDto>.GetSuccessfulResult(result);
-                _logger.LogData(MethodBase.GetCurrentMethod(), finalres, null, order);
-                return finalres;
 
+                    var sendSms = new SendSMS();
+                    sendSms.SendSuccessOrderPayment(cc.Mobile.Value, customerOrderPayment.OrderNo, customerOrderPayment.PaymentPrice.Value);
+
+                    var sendEmail = new SendEmail();
+                    var email = cc.Email;
+                    sendEmail.SendSuccessOrderPayment(email, customerOrderPayment.OrderNo, customerOrderPayment.PaymentPrice.Value);
+
+
+
+                    var productist = _repository.CustomerOrderProduct.FindByCondition(c => c.CustomerOrderId == customerOrder.Id).Select(c => c.Product).ToList();
+                    productist.ForEach(c =>
+                    {
+                        c.Count = c.Count--;
+                        _repository.Product.Update(c);
+                    });
+
+
+                    var sellerList = _repository.CustomerOrderProduct.FindByCondition(c => c.CustomerOrderId == customerOrder.Id).Select(c => c.Seller.Mobile).ToList();
+
+                    sellerList.ForEach(c =>
+                    {
+                        if (c == null) return;
+                        var sendSms = new SendSMS();
+                        sendSms.SendOrderSmsForSeller(c.Value);
+
+
+                    });
+                    _repository.Save();
+
+                    var result = new InsertOrderResultDto
+                    {
+                        OrderNo = customerOrder.OrderNo,
+                        CustomerOrderId = customerOrder.Id,
+                        BankUrl = "",
+                        RedirectToBank = false,
+                        PostPrice = customerOrder.PostServicePrice
+                    };
+                    var finalres = SingleResult<InsertOrderResultDto>.GetSuccessfulResult(result);
+                    _logger.LogData(MethodBase.GetCurrentMethod(), finalres, null, order);
+                    return finalres;
+                }
 
             }
             catch (Exception e)
