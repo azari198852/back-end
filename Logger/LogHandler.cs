@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 
 namespace Logger
 {
@@ -30,6 +31,7 @@ namespace Logger
 
         public void LogError(Exception ex, MethodBase serviceMethodInfo, params object[] serviceParameterValues)
         {
+            JsonSerializerOptions option = new JsonSerializerOptions() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
             try
             {
 
@@ -88,6 +90,7 @@ namespace Logger
 
                 try
                 {
+                    
                     if (serviceMethodInfo.DeclaringType is { })
                     {
                         var log = new SystemErrorLog()
@@ -96,7 +99,7 @@ namespace Logger
                             ExceptionStr = "********************** خطا در لاگ ارور***********" + ex.ToString(),
                             ServiceName = serviceMethodInfo.DeclaringType.FullName,
                             ServiceMethodName = serviceMethodInfo.Name,
-                            ServiceParameters = JsonConvert.SerializeObject(serviceParameterValues)
+                            ServiceParameters =System.Text.Json.JsonSerializer.Serialize(serviceParameterValues, option)
                         };
 
                         _repoContext.SystemErrorLogs.Add(log);
@@ -113,9 +116,10 @@ namespace Logger
 
         public void LogData(MethodBase methodInfo, object answer, TimeSpan? executeTime, params object[] parameterValues)
         {
+            JsonSerializerOptions option = new JsonSerializerOptions() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
             try
             {
-                var log = new OperationLog { Answer = answer == null ? null : System.Text.Json.JsonSerializer.Serialize(answer) };
+                var log = new OperationLog { Answer = answer == null ? null : System.Text.Json.JsonSerializer.Serialize(answer, option) };
                 if (answer != null)
                 {
                     object answerObj;
@@ -129,7 +133,7 @@ namespace Logger
                     }
                     else
                         answerObj = answer;
-                    log.Answer = System.Text.Json.JsonSerializer.Serialize(answerObj);
+                    log.Answer = System.Text.Json.JsonSerializer.Serialize(answerObj,option);
                 }
                 log.CreateDateTime = DateTime.Now;
                 log.ExecuteTime = executeTime == null ? null : executeTime.ToString();
@@ -154,7 +158,7 @@ namespace Logger
                                 ExceptionStr = "********************** خطا در لاگ دیتا***********" + e.ToString(),
                                 ServiceName = methodInfo.DeclaringType.FullName,
                                 ServiceMethodName = methodInfo.Name,
-                                ServiceParameters = JsonConvert.SerializeObject(parameterValues)
+                                ServiceParameters = System.Text.Json.JsonSerializer.Serialize(parameterValues,option)
                             };
                             _repoContext.SystemErrorLogs.Add(log);
                         }
@@ -231,6 +235,7 @@ namespace Logger
 
         private string SerializeParameters(ParameterInfo[] parameterNames, object[] parameterValues, MemberInfo methodInfo)
         {
+            JsonSerializerOptions option = new JsonSerializerOptions() { Encoder = System.Text.Encodings.Web.JavaScriptEncoder.UnsafeRelaxedJsonEscaping };
             try
             {
                 var parametersJs = string.Empty;
@@ -246,7 +251,7 @@ namespace Logger
                         else
                             dictionary.Add(parameterNames[i].Name ?? string.Empty, parameterValues[i]);
                     }
-                    parametersJs = JsonConvert.SerializeObject(dictionary);
+                    parametersJs = System.Text.Json.JsonSerializer.Serialize(dictionary,option);
                     //JsonConvert.SerializeObject(dictionary, Formatting.Indented, new JsonSerializerSettings() { ReferenceLoopHandling = ReferenceLoopHandling.Ignore });
                 }
                 else

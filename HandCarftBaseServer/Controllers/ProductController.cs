@@ -545,7 +545,7 @@ namespace HandCarftBaseServer.Controllers
                     case 2:
                         res = _repository.Product.GetProductListFullInfo()
                             .Where(c => (filter.ProductName == null || c.Name.Contains(filter.ProductName)) &&
-                                        (c.CatProductId == filter.CatProductId || filter.CatProductId == null) &&
+                                        (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
                                         (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
@@ -559,7 +559,7 @@ namespace HandCarftBaseServer.Controllers
                     case 3:
                         res = _repository.Product.GetProductListFullInfo()
                             .Where(c => (filter.ProductName == null || c.Name.Contains(filter.ProductName)) &&
-                                        (c.CatProductId == filter.CatProductId || filter.CatProductId == null) &&
+                                        (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
                                         (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
@@ -573,7 +573,7 @@ namespace HandCarftBaseServer.Controllers
                     case 4:
                         res = _repository.Product.GetProductListFullInfo()
                             .Where(c => (filter.ProductName == null || c.Name.Contains(filter.ProductName)) &&
-                                        (c.CatProductId == filter.CatProductId || filter.CatProductId == null) &&
+                                        (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
                                         (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
@@ -587,7 +587,7 @@ namespace HandCarftBaseServer.Controllers
                     case 5:
                         res = _repository.Product.GetProductListFullInfo()
                             .Where(c => (filter.ProductName == null || c.Name.Contains(filter.ProductName)) &&
-                                        (c.CatProductId == filter.CatProductId || filter.CatProductId == null) &&
+                                        (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
                                         (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
@@ -602,7 +602,7 @@ namespace HandCarftBaseServer.Controllers
                         res = _repository.Product.GetProductListFullInfo()
                             .Where(c => c.MelliFlag == true &&
                                         (filter.ProductName == null || c.Name.Contains(filter.ProductName)) &&
-                                        (c.CatProductId == filter.CatProductId || filter.CatProductId == null) &&
+                                        (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
                                         (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
@@ -616,7 +616,7 @@ namespace HandCarftBaseServer.Controllers
                         res = _repository.Product.GetProductListFullInfo()
                             .Where(c => c.UnescoFlag == true &&
                                         (filter.ProductName == null || c.Name.Contains(filter.ProductName)) &&
-                                        (c.CatProductId == filter.CatProductId || filter.CatProductId == null) &&
+                                        (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
                                         (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
@@ -629,7 +629,7 @@ namespace HandCarftBaseServer.Controllers
                     default:
                         res = _repository.Product.GetProductListFullInfo()
                             .Where(c => (filter.ProductName == null || c.Name.Contains(filter.ProductName)) &&
-                                        (c.CatProductId == filter.CatProductId || filter.CatProductId == null) &&
+                                        (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
                                         (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
@@ -800,7 +800,7 @@ namespace HandCarftBaseServer.Controllers
             try
             {
 
-                var res = _repository.RelatedProduct.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.OriginProductId == productId)
+                var res = _repository.RelatedProduct.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.OriginProductId == productId && c.DestinProduct.FinalStatusId == 8)
                     .Include(c => c.DestinProduct).Select(c => c.DestinProduct).ToList();
 
 
@@ -850,7 +850,13 @@ namespace HandCarftBaseServer.Controllers
             try
             {
 
-                var res = _repository.Product.GetProductListFullInfo().Where(c => c.CatProductId == catProductId).ToList();
+                var res = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8)
+                    .Include(c => c.CatProduct)
+                    .Include(c => c.FinalStatus)
+                    .Include(c => c.Seller)
+                    .Include(c => c.ProductCustomerRate)
+                    .Include(c => c.ProductOffer).ThenInclude(c => c.Offer).Where(c => c.CatProductId == catProductId || c.CatProduct.Pid == catProductId).ToList();
+
 
                 var result = _mapper.Map<List<ProductDto>>(res);
 
@@ -985,7 +991,7 @@ namespace HandCarftBaseServer.Controllers
                 if (string.IsNullOrWhiteSpace(name) || name.Length < 3)
                     return ListResult<ProductGeneralSearchResultDto>.GetSuccessfulResult(null);
 
-                var res = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.Name.Contains(name)).Include(c => c.CatProduct).ToList();
+                var res = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8 && c.Name.Contains(name)).Include(c => c.CatProduct).ToList();
                 var res1 = _repository.CatProduct
                     .FindByCondition(c => c.DaDate == null && c.Ddate == null && c.Name.Contains(name)).Select(c =>
                         new ProductGeneralSearchResultDto
@@ -1022,7 +1028,7 @@ namespace HandCarftBaseServer.Controllers
                 var time = DateTime.Now.Ticks;
                 var productList = _repository.Product
                     .FindByCondition(c =>
-                        c.Ddate == null && c.DaDate == null &&
+                        c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8 &&
                         c.ProductOffer.Any(x => x.FromDate < time && time < x.ToDate)).Include(c => c.ProductOffer)
                     .Select(c => new
                     {
@@ -1035,7 +1041,7 @@ namespace HandCarftBaseServer.Controllers
                 //.OrderByDescending(c => c.).Take(10).ToList();
                 var result = _mapper.Map<List<ProductDto>>(res);
                 //var result = new List<ProductDto>();
-                var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result.OrderByDescending(c=>c.OfferAmount).ToList());
+                var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result.OrderByDescending(c => c.OfferAmount).ToList());
                 _logger.LogData(MethodBase.GetCurrentMethod(), finalresult, null);
                 return finalresult;
 

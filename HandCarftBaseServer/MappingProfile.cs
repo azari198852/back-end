@@ -29,7 +29,7 @@ namespace HandCarftBaseServer
             CreateMap<CatProduct, CatProductDto>();
             CreateMap<CatProductDto, CatProduct>();
             CreateMap<CatProduct, CatProductWithCountDto>()
-                .ForMember(u => u.ProductCount, opt => opt.MapFrom(x => x.Product.Count + (x.InverseP.Select(w => w.Product.Count).Sum())));
+                .ForMember(u => u.ProductCount, opt => opt.MapFrom(x => x.Product.Where(y => y.DaDate == null && y.Ddate == null && y.FinalStatusId == 8).Count() + (x.InverseP.Sum(w => w.Product.Where(y => y.DaDate == null && y.Ddate == null && y.FinalStatusId == 8).Count()))));
 
 
             #endregion

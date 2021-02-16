@@ -20,7 +20,7 @@ namespace Repository
 
         public IQueryable<Product> GetProductListFullInfo()
         {
-            var res = FindByCondition(c => c.Ddate == null && c.DaDate == null)
+            var res = FindByCondition(c => c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8)
                   .Include(c => c.CatProduct)
                   .Include(c => c.FinalStatus)
                   .Include(c => c.Seller)
