@@ -151,7 +151,7 @@ namespace HandCarftBaseServer
                 .ForMember(u => u.OfferDeadLine, opt => opt.MapFrom(x =>
                     x.ProductOffer
                         .Where(c => c.FromDate < now && now < c.ToDate && c.DaDate == null &&
-                                    c.Ddate == null).Select(c =>new DateTime(c.ToDate.Value)).FirstOrDefault()));
+                                    c.Ddate == null).Select(c => c.ToDate != null ? new DateTime(c.ToDate.Value) : new DateTime(1988, 12, 13)).FirstOrDefault()));
 
             CreateMap<Product, ProductGeneralSearchResultDto>()
                 .ForMember(u => u.ProductId, opt => opt.MapFrom(x => x.Id))
