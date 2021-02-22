@@ -755,7 +755,7 @@ namespace HandCarftBaseServer.Controllers
             {
                 _logger.LogError(e, MethodBase.GetCurrentMethod(), authority, status);
 
-                return SingleResult<string>.GetFailResult("خطا در سامانه");
+                return SingleResult<string>.GetFailResult(e.Message);
             }
         }
 

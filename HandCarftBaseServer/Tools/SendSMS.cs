@@ -121,15 +121,10 @@ namespace HandCarftBaseServer.Tools
 
         }
 
-        public string SendWalletActivationSms(long mobileNo, int code)
+        public string SendWalletActivationSms(long mobileNo, int code ,string fullname)
         {
 
-            var smsText = "کد تایید شما برای تغییر رمز در سایت ";
-            smsText += "tabrizhandicrafts.com";
-            smsText += "\\n";
-            smsText += "";
-            smsText += code.ToString();
-            smsText += " می باشد.";
+   
 
             var mob = "0" + mobileNo.ToString();
 
@@ -143,8 +138,8 @@ namespace HandCarftBaseServer.Tools
                                               ",\"pass\":  \"1375989081\"" +
                                               ",\"fromNum\" : \"+983000505\"" +
                                               $",\"toNum\": \"{mob}\"" +
-                                              ",\"patternCode\": \"u6qmhwhh1h\"" +
-                                              ",\"inputData\" : {\"verification-code\":" + $"\"{code}\"" + "}}"
+                                              ",\"patternCode\": \"zja5wkrpay\"" +
+                                              ",\"inputData\" : {\"Customer\":" + $"\"{fullname}\"" + ",\"code\":" + $"\"{code}\""+"}}"
                 , ParameterType.RequestBody);
 
 

@@ -185,7 +185,7 @@ namespace HandCarftBaseServer.Controllers
                 });
 
                 var sms = new SendSMS();
-                var bb = sms.SendWalletActivationSms(user.Mobile.Value, code);
+                var bb = sms.SendWalletActivationSms(user.Mobile.Value, code, user.FullName);
                 var finalres = VoidResult.GetSuccessResult("کد فعال سازی برای کیف پول ، با موفقیت ارسال شد");
                 _logger.LogData(MethodBase.GetCurrentMethod(), finalres, null);
                 return finalres;
