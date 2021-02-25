@@ -73,6 +73,7 @@ namespace Contracts
         ICustomerFavoriteProductsRepository CustomerFavoriteProducts { get; }
         IEmployeeRepository Employee { get; }
         IProductPackingTypeListRepository ProductPackingTypeList { get; }
+        ICustomerWalletChargeRepository CustomerWalletCharge { get; }
 
         void Save();
     }
