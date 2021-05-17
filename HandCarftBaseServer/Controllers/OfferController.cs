@@ -137,6 +137,23 @@ namespace HandCarftBaseServer.Controllers
                     offer.DaDate = DateTime.Now.Ticks;
                 }
 
+                var poffer=_repository.ProductOffer.FindByCondition(c => c.OfferId == offerId).ToList();
+                poffer.ForEach(c =>
+                {
+                    if (c.DaDate != null)
+                    {
+                        c.DaDate = null;
+                        c.DaUserId = ClaimPrincipalFactory.GetUserId(User);
+
+                    }
+                    else
+                    {
+                        c.DaDate = DateTime.Now.Ticks;
+                        c.DaUserId = ClaimPrincipalFactory.GetUserId(User);
+                    }
+
+                });
+                _repository.ProductOffer.UpdateRange(poffer);
                 _repository.Offer.Update(offer);
                 _repository.Save();
                 _logger.LogData(MethodBase.GetCurrentMethod(), General.Results_.SuccessMessage(), null, offerId);

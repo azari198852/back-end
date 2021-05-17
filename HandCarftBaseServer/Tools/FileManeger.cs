@@ -55,7 +55,7 @@ namespace HandCarftBaseServer.Tools
                         }
 
                         _uploadFileStatus.Status = 200;
-                        _uploadFileStatus.Path =string.Concat(sitepath, filePath.Replace("wwwroot", ""));
+                        _uploadFileStatus.Path = string.Concat(sitepath, filePath.Replace("wwwroot", ""));
                     }
 
 
@@ -231,7 +231,7 @@ namespace HandCarftBaseServer.Tools
 
         public const int ImageMinimumBytes = 5 * 1024;
         public const int ImageMaximumBytes = 5 * 1024 * 1024;
-        static bool IsImage(IFormFile postedFile)
+        public static bool IsImage(IFormFile postedFile)
         {
             //-------------------------------------------
             //  Check the image mime types
@@ -269,7 +269,7 @@ namespace HandCarftBaseServer.Tools
         public const int VideoMinimumBytes = 5 * 1024;
         public const int VideoMaximumBytes = 100 * 1024 * 1024;
 
-        static bool IsVideo(IFormFile postedFile)
+        public static bool IsVideo(IFormFile postedFile)
         {
 
 
@@ -311,7 +311,7 @@ namespace HandCarftBaseServer.Tools
         public const int ValidMinimumBytes = 1 * 1024;
         public const int ValidMaximumBytes = 100 * 1024 * 1024;
 
-        static bool IsValid(IFormFile postedFile)
+        public static bool IsValid(IFormFile postedFile)
         {
 
 
@@ -372,7 +372,7 @@ namespace HandCarftBaseServer.Tools
 
             foreach (string item in FileAddress)
             {
-                var path= Startup.StaticConfig["SiteUrl"];
+                var path = Startup.StaticConfig["SiteUrl"];
 
                 var pp = item.Replace(path, "");
 

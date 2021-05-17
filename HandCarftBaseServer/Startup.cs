@@ -90,6 +90,7 @@ namespace HandCarftBaseServer
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseDeveloperExceptionPage();
 
             app.UseCors(
                 options => options.AllowAnyHeader()

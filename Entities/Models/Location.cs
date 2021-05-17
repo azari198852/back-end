@@ -15,6 +15,7 @@ namespace Entities.Models
             InverseProvince = new HashSet<Location>();
             PaymentTypeLocation = new HashSet<PaymentTypeLocation>();
             Seller = new HashSet<Seller>();
+            SellerAddress = new HashSet<SellerAddress>();
         }
 
         public long Id { get; set; }
@@ -45,5 +46,6 @@ namespace Entities.Models
         public virtual ICollection<Location> InverseProvince { get; set; }
         public virtual ICollection<PaymentTypeLocation> PaymentTypeLocation { get; set; }
         public virtual ICollection<Seller> Seller { get; set; }
+        public virtual ICollection<SellerAddress> SellerAddress { get; set; }
     }
 }

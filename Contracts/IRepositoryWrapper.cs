@@ -74,6 +74,7 @@ namespace Contracts
         IEmployeeRepository Employee { get; }
         IProductPackingTypeListRepository ProductPackingTypeList { get; }
         ICustomerWalletChargeRepository CustomerWalletCharge { get; }
+        IProductPackageRepository ProductPackage { get; }
 
         void Save();
     }

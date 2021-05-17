@@ -26,5 +26,6 @@ namespace Entities.Models
         public long? DaDate { get; set; }
 
         public virtual Seller Seller { get; set; }
+        public virtual Location Province { get; set; }
     }
 }

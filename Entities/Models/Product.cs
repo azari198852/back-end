@@ -18,10 +18,13 @@ namespace Entities.Models
             ProductImage = new HashSet<ProductImage>();
             ProductLanguage = new HashSet<ProductLanguage>();
             ProductOffer = new HashSet<ProductOffer>();
+            ProductPackageDepProduct = new HashSet<ProductPackage>();
+            ProductPackageMainProduct = new HashSet<ProductPackage>();
             ProductPackingType = new HashSet<ProductPackingType>();
             ProductStatusLog = new HashSet<ProductStatusLog>();
             RelatedProductDestinProduct = new HashSet<RelatedProduct>();
             RelatedProductOriginProduct = new HashSet<RelatedProduct>();
+
         }
 
         public long Id { get; set; }
@@ -60,6 +63,7 @@ namespace Entities.Models
         public int? OredrDuration { get; set; }
         public string DownloadLink { get; set; }
         public bool? VirtualProduct { get; set; }
+        public bool? IsPackage { get; set; }
         public long? CuserId { get; set; }
         public long? Cdate { get; set; }
         public long? DuserId { get; set; }
@@ -82,6 +86,8 @@ namespace Entities.Models
         public virtual ICollection<ProductImage> ProductImage { get; set; }
         public virtual ICollection<ProductLanguage> ProductLanguage { get; set; }
         public virtual ICollection<ProductOffer> ProductOffer { get; set; }
+        public virtual ICollection<ProductPackage> ProductPackageDepProduct { get; set; }
+        public virtual ICollection<ProductPackage> ProductPackageMainProduct { get; set; }
         public virtual ICollection<ProductPackingType> ProductPackingType { get; set; }
         public virtual ICollection<ProductStatusLog> ProductStatusLog { get; set; }
         public virtual ICollection<RelatedProduct> RelatedProductDestinProduct { get; set; }

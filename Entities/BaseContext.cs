@@ -27,17 +27,17 @@ namespace Entities
         public virtual DbSet<CatStatus> CatStatus { get; set; }
         public virtual DbSet<Color> Color { get; set; }
         public virtual DbSet<Comission> Comission { get; set; }
-        public virtual DbSet<CustomerFavoriteProducts> CustomerFavoriteProducts { get; set; }
         public virtual DbSet<Customer> Customer { get; set; }
         public virtual DbSet<CustomerAddress> CustomerAddress { get; set; }
+        public virtual DbSet<CustomerFavoriteProducts> CustomerFavoriteProducts { get; set; }
         public virtual DbSet<CustomerOffer> CustomerOffer { get; set; }
         public virtual DbSet<CustomerOrder> CustomerOrder { get; set; }
         public virtual DbSet<CustomerOrderPayment> CustomerOrderPayment { get; set; }
         public virtual DbSet<CustomerOrderProduct> CustomerOrderProduct { get; set; }
-        public virtual DbSet<CustomerWalletCharge> CustomerWalletCharge { get; set; }
         public virtual DbSet<CustomerOrderProductStatusLog> CustomerOrderProductStatusLog { get; set; }
         public virtual DbSet<CustomerOrderStatusLog> CustomerOrderStatusLog { get; set; }
         public virtual DbSet<CustomerStatusLog> CustomerStatusLog { get; set; }
+        public virtual DbSet<CustomerWalletCharge> CustomerWalletCharge { get; set; }
         public virtual DbSet<Document> Document { get; set; }
         public virtual DbSet<DynamiFormImage> DynamiFormImage { get; set; }
         public virtual DbSet<DynamicForms> DynamicForms { get; set; }
@@ -71,6 +71,7 @@ namespace Entities
         public virtual DbSet<ProductImage> ProductImage { get; set; }
         public virtual DbSet<ProductLanguage> ProductLanguage { get; set; }
         public virtual DbSet<ProductOffer> ProductOffer { get; set; }
+        public virtual DbSet<ProductPackage> ProductPackage { get; set; }
         public virtual DbSet<ProductPackingType> ProductPackingType { get; set; }
         public virtual DbSet<ProductPackingTypeImage> ProductPackingTypeImage { get; set; }
         public virtual DbSet<ProductPackingTypeList> ProductPackingTypeList { get; set; }
@@ -99,14 +100,20 @@ namespace Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
+                optionsBuilder.UseSqlServer("Data Source=185.192.112.67;Initial Catalog=tabrizhandicrafts_test_;User ID=Tabrizhandicraft;Password=Tabriz123@;MultipleActiveResultSets=true");
+            }
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.HasAnnotation("Relational:DefaultSchema", "Tabrizhandicraft");
+
             modelBuilder.Entity<Api>(entity =>
             {
-                entity.ToTable("API");
+                entity.ToTable("API", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -149,7 +156,7 @@ namespace Entities
 
             modelBuilder.Entity<CatApi>(entity =>
             {
-                entity.ToTable("CatAPI");
+                entity.ToTable("CatAPI", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -179,6 +186,8 @@ namespace Entities
 
             modelBuilder.Entity<CatDocument>(entity =>
             {
+                entity.ToTable("CatDocument", "dbo");
+
                 entity.HasIndex(e => e.Rkey)
                     .HasName("IX_CatDocument")
                     .IsUnique();
@@ -204,6 +213,8 @@ namespace Entities
 
             modelBuilder.Entity<CatFrom>(entity =>
             {
+                entity.ToTable("CatFrom", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -240,6 +251,8 @@ namespace Entities
 
             modelBuilder.Entity<CatProduct>(entity =>
             {
+                entity.ToTable("CatProduct", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -284,6 +297,8 @@ namespace Entities
 
             modelBuilder.Entity<CatProductLanguage>(entity =>
             {
+                entity.ToTable("CatProductLanguage", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CatProductId).HasColumnName("CatProductID");
@@ -327,6 +342,8 @@ namespace Entities
 
             modelBuilder.Entity<CatProductParameters>(entity =>
             {
+                entity.ToTable("CatProductParameters", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CatProductId).HasColumnName("CatProductID");
@@ -360,9 +377,7 @@ namespace Entities
 
             modelBuilder.Entity<CatRole>(entity =>
             {
-                entity.HasIndex(e => e.Rkey)
-                    .HasName("IX_CatRole")
-                    .IsUnique();
+                entity.ToTable("CatRole", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -392,6 +407,8 @@ namespace Entities
 
             modelBuilder.Entity<CatStatus>(entity =>
             {
+                entity.ToTable("CatStatus", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -552,6 +569,8 @@ namespace Entities
 
             modelBuilder.Entity<CustomerAddress>(entity =>
             {
+                entity.ToTable("CustomerAddress", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Address).HasMaxLength(1024);
@@ -629,6 +648,8 @@ namespace Entities
 
             modelBuilder.Entity<CustomerOffer>(entity =>
             {
+                entity.ToTable("CustomerOffer", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -664,6 +685,8 @@ namespace Entities
 
             modelBuilder.Entity<CustomerOrder>(entity =>
             {
+                entity.ToTable("CustomerOrder", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.AdminDescription).HasMaxLength(2048);
@@ -755,6 +778,8 @@ namespace Entities
 
             modelBuilder.Entity<CustomerOrderPayment>(entity =>
             {
+                entity.ToTable("CustomerOrderPayment", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CardPan)
@@ -814,6 +839,8 @@ namespace Entities
 
             modelBuilder.Entity<CustomerOrderProduct>(entity =>
             {
+                entity.ToTable("CustomerOrderProduct", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.AdminDescription).HasMaxLength(2048);
@@ -899,6 +926,8 @@ namespace Entities
 
             modelBuilder.Entity<CustomerOrderProductStatusLog>(entity =>
             {
+                entity.ToTable("CustomerOrderProductStatusLog", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -932,6 +961,8 @@ namespace Entities
 
             modelBuilder.Entity<CustomerOrderStatusLog>(entity =>
             {
+                entity.ToTable("CustomerOrderStatusLog", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -965,6 +996,8 @@ namespace Entities
 
             modelBuilder.Entity<CustomerStatusLog>(entity =>
             {
+                entity.ToTable("CustomerStatusLog", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1034,6 +1067,8 @@ namespace Entities
 
             modelBuilder.Entity<Document>(entity =>
             {
+                entity.ToTable("Document", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CatDocumentId).HasColumnName("CatDocumentID");
@@ -1123,6 +1158,8 @@ namespace Entities
 
             modelBuilder.Entity<Employee>(entity =>
             {
+                entity.ToTable("Employee", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.UserId).HasColumnName("UserID");
@@ -1135,6 +1172,8 @@ namespace Entities
 
             modelBuilder.Entity<FamousComments>(entity =>
             {
+                entity.ToTable("FamousComments", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1164,6 +1203,8 @@ namespace Entities
 
             modelBuilder.Entity<Forms>(entity =>
             {
+                entity.ToTable("Forms", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CatFromsId).HasColumnName("CatFromsID");
@@ -1200,7 +1241,7 @@ namespace Entities
 
             modelBuilder.Entity<FormsApi>(entity =>
             {
-                entity.ToTable("FormsAPI");
+                entity.ToTable("FormsAPI", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -1237,6 +1278,8 @@ namespace Entities
 
             modelBuilder.Entity<GetPostCity>(entity =>
             {
+                entity.ToTable("GetPostCity", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Name).HasMaxLength(512);
@@ -1246,6 +1289,8 @@ namespace Entities
 
             modelBuilder.Entity<Language>(entity =>
             {
+                entity.ToTable("Language", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1275,6 +1320,8 @@ namespace Entities
 
             modelBuilder.Entity<Location>(entity =>
             {
+                entity.ToTable("Location", "dbo");
+
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .ValueGeneratedNever();
@@ -1321,6 +1368,8 @@ namespace Entities
 
             modelBuilder.Entity<MobileAppType>(entity =>
             {
+                entity.ToTable("MobileAppType", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1344,6 +1393,8 @@ namespace Entities
 
             modelBuilder.Entity<Offer>(entity =>
             {
+                entity.ToTable("Offer", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1353,6 +1404,8 @@ namespace Entities
                 entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
 
                 entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.Description).HasMaxLength(2048);
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
 
@@ -1374,6 +1427,8 @@ namespace Entities
 
             modelBuilder.Entity<OfferType>(entity =>
             {
+                entity.ToTable("OfferType", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1395,6 +1450,8 @@ namespace Entities
 
             modelBuilder.Entity<Package>(entity =>
             {
+                entity.ToTable("Package", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1420,6 +1477,8 @@ namespace Entities
 
             modelBuilder.Entity<PackageImage>(entity =>
             {
+                entity.ToTable("PackageImage", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1453,6 +1512,8 @@ namespace Entities
 
             modelBuilder.Entity<PackageProduct>(entity =>
             {
+                entity.ToTable("PackageProduct", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1558,6 +1619,8 @@ namespace Entities
 
             modelBuilder.Entity<Parameters>(entity =>
             {
+                entity.ToTable("Parameters", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1586,6 +1649,8 @@ namespace Entities
 
             modelBuilder.Entity<PaymentType>(entity =>
             {
+                entity.ToTable("PaymentType", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1611,6 +1676,8 @@ namespace Entities
 
             modelBuilder.Entity<PaymentTypeLocation>(entity =>
             {
+                entity.ToTable("PaymentTypeLocation", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1644,6 +1711,8 @@ namespace Entities
 
             modelBuilder.Entity<PostGetState>(entity =>
             {
+                entity.ToTable("PostGetState", "dbo");
+
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .ValueGeneratedNever();
@@ -1653,6 +1722,8 @@ namespace Entities
 
             modelBuilder.Entity<PostType>(entity =>
             {
+                entity.ToTable("PostType", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.ApiUrl)
@@ -1684,6 +1755,8 @@ namespace Entities
 
             modelBuilder.Entity<Product>(entity =>
             {
+                entity.ToTable("Product", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.AparatUrl)
@@ -1752,6 +1825,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductCatProductParameters>(entity =>
             {
+                entity.ToTable("ProductCatProductParameters", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CatProductParametersId).HasColumnName("CatProductParametersID");
@@ -1787,6 +1862,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductColor>(entity =>
             {
+                entity.ToTable("ProductColor", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1827,6 +1904,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductColorStatusLog>(entity =>
             {
+                entity.ToTable("ProductColorStatusLog", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1935,7 +2014,7 @@ namespace Entities
                 entity.HasOne(d => d.FinalStatus)
                     .WithMany(p => p.ProductCustomerRate)
                     .HasForeignKey(d => d.FinalStatusId)
-                    .HasConstraintName("FK_ProductCustomerRate_StatusType");
+                    .HasConstraintName("FK_ProductCustomerRate_Status");
 
                 entity.HasOne(d => d.P)
                     .WithMany(p => p.InverseP)
@@ -1950,6 +2029,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductCustomerRateImage>(entity =>
             {
+                entity.ToTable("ProductCustomerRateImage", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -1983,6 +2064,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductImage>(entity =>
             {
+                entity.ToTable("ProductImage", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2018,6 +2101,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductLanguage>(entity =>
             {
+                entity.ToTable("ProductLanguage", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.AparatUrl)
@@ -2069,6 +2154,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductOffer>(entity =>
             {
+                entity.ToTable("ProductOffer", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2098,6 +2185,39 @@ namespace Entities
                     .WithMany(p => p.ProductOffer)
                     .HasForeignKey(d => d.ProductId)
                     .HasConstraintName("FK_ProductOffer_Product");
+            });
+
+            modelBuilder.Entity<ProductPackage>(entity =>
+            {
+                entity.Property(e => e.Id).HasColumnName("ID");
+
+                entity.Property(e => e.Cdate).HasColumnName("CDate");
+
+                entity.Property(e => e.CuserId).HasColumnName("CUserID");
+
+                entity.Property(e => e.DaUserId).HasColumnName("DaUserID");
+
+                entity.Property(e => e.Ddate).HasColumnName("DDate");
+
+                entity.Property(e => e.DepProductId).HasColumnName("DepProductID");
+
+                entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.MainProductId).HasColumnName("MainProductID");
+
+                entity.Property(e => e.Mdate).HasColumnName("MDate");
+
+                entity.Property(e => e.MuserId).HasColumnName("MUserID");
+
+                entity.HasOne(d => d.DepProduct)
+                    .WithMany(p => p.ProductPackageDepProduct)
+                    .HasForeignKey(d => d.DepProductId)
+                    .HasConstraintName("FK_ProductPackage_Product1");
+
+                entity.HasOne(d => d.MainProduct)
+                    .WithMany(p => p.ProductPackageMainProduct)
+                    .HasForeignKey(d => d.MainProductId)
+                    .HasConstraintName("FK_ProductPackage_Product");
             });
 
             modelBuilder.Entity<ProductPackingType>(entity =>
@@ -2203,6 +2323,8 @@ namespace Entities
 
             modelBuilder.Entity<ProductStatusLog>(entity =>
             {
+                entity.ToTable("ProductStatusLog", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2236,6 +2358,8 @@ namespace Entities
 
             modelBuilder.Entity<RelatedProduct>(entity =>
             {
+                entity.ToTable("RelatedProduct", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2269,6 +2393,8 @@ namespace Entities
 
             modelBuilder.Entity<Role>(entity =>
             {
+                entity.ToTable("Role", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CatRoleId).HasColumnName("CatRoleID");
@@ -2306,6 +2432,8 @@ namespace Entities
 
             modelBuilder.Entity<RoleForms>(entity =>
             {
+                entity.ToTable("RoleForms", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2339,7 +2467,7 @@ namespace Entities
 
             modelBuilder.Entity<RoleFormsApi>(entity =>
             {
-                entity.ToTable("RoleFormsAPI");
+                entity.ToTable("RoleFormsAPI", "dbo");
 
                 entity.Property(e => e.Id).HasColumnName("ID");
 
@@ -2450,6 +2578,8 @@ namespace Entities
 
             modelBuilder.Entity<SellerAddress>(entity =>
             {
+                entity.ToTable("SellerAddress", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Address).HasMaxLength(1024);
@@ -2483,6 +2613,11 @@ namespace Entities
                 entity.Property(e => e.Ygps)
                     .HasColumnName("YGPS")
                     .HasMaxLength(128);
+
+                entity.HasOne(d => d.Province)
+                    .WithMany(p => p.SellerAddress)
+                    .HasForeignKey(d => d.ProvinceId)
+                    .HasConstraintName("FK_SellerAddress_Location");
 
                 entity.HasOne(d => d.Seller)
                     .WithMany(p => p.SellerAddress)
@@ -2626,6 +2761,8 @@ namespace Entities
 
             modelBuilder.Entity<SellerStatusLog>(entity =>
             {
+                entity.ToTable("SellerStatusLog", "dbo");
+
                 entity.Property(e => e.Id)
                     .HasColumnName("ID")
                     .ValueGeneratedNever();
@@ -2661,6 +2798,8 @@ namespace Entities
 
             modelBuilder.Entity<Slider>(entity =>
             {
+                entity.ToTable("Slider", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2703,6 +2842,8 @@ namespace Entities
 
             modelBuilder.Entity<SliderPlace>(entity =>
             {
+                entity.ToTable("SliderPlace", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2772,6 +2913,8 @@ namespace Entities
 
             modelBuilder.Entity<StatusType>(entity =>
             {
+                entity.ToTable("StatusType", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2795,6 +2938,8 @@ namespace Entities
 
             modelBuilder.Entity<Systems>(entity =>
             {
+                entity.ToTable("Systems", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2830,6 +2975,8 @@ namespace Entities
 
             modelBuilder.Entity<Tables>(entity =>
             {
+                entity.ToTable("Tables", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.CatStatusId).HasColumnName("CatStatusID");
@@ -2867,6 +3014,8 @@ namespace Entities
 
             modelBuilder.Entity<TablesServiceDiscovery>(entity =>
             {
+                entity.ToTable("TablesServiceDiscovery", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2916,6 +3065,8 @@ namespace Entities
 
             modelBuilder.Entity<UserActivation>(entity =>
             {
+                entity.ToTable("UserActivation", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2942,6 +3093,8 @@ namespace Entities
 
             modelBuilder.Entity<UserRole>(entity =>
             {
+                entity.ToTable("UserRole", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -2975,6 +3128,8 @@ namespace Entities
 
             modelBuilder.Entity<Users>(entity =>
             {
+                entity.ToTable("Users", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");
@@ -3006,6 +3161,8 @@ namespace Entities
 
             modelBuilder.Entity<Work>(entity =>
             {
+                entity.ToTable("Work", "dbo");
+
                 entity.Property(e => e.Id).HasColumnName("ID");
 
                 entity.Property(e => e.Cdate).HasColumnName("CDate");

@@ -76,6 +76,7 @@ namespace Repository
         private IEmployeeRepository _employee;
         private IProductPackingTypeListRepository _productPackingTypeList;
         private ICustomerWalletChargeRepository _customerWalletCharge;
+        private IProductPackageRepository _productPackage;
 
 
         public IApiRepository Api => _api ??= new ApiRepository(_repoContext);
@@ -145,6 +146,7 @@ namespace Repository
         public IEmployeeRepository Employee => _employee ??= new EmployeeRepository(_repoContext);
         public IProductPackingTypeListRepository ProductPackingTypeList => _productPackingTypeList ??= new ProductPackingTypeListRepository(_repoContext);
         public ICustomerWalletChargeRepository CustomerWalletCharge => _customerWalletCharge ??= new CustomerWalletChargeRepository(_repoContext);
+        public IProductPackageRepository ProductPackage => _productPackage ??= new ProductPackageRepository(_repoContext);
         public RepositoryWrapper(BaseContext repositoryContext)
         {
             _repoContext = repositoryContext;
