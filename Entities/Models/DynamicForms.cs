@@ -11,6 +11,7 @@ namespace Entities.Models
         }
 
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string Title { get; set; }
         public string TitleMetaData { get; set; }
         public string DescriptionMeta { get; set; }
@@ -25,6 +26,7 @@ namespace Entities.Models
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
 
+        public virtual Language Language { get; set; }
         public virtual ICollection<DynamiFormImage> DynamiFormImage { get; set; }
     }
 }

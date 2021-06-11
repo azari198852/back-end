@@ -200,12 +200,12 @@ namespace HandCarftBaseServer.Controllers
         [Authorize]
         [HttpGet]
         [Route("PackingType/GetPackingTypeList")]
-        public IActionResult GetPackingTypeList()
+        public IActionResult GetPackingTypeList(long? languageId)
         {
 
             try
             {
-                var res = _repository.PackingType.FindByCondition(c => c.DaDate == null && c.Ddate == null)
+                var res = _repository.PackingType.FindByCondition(c => c.DaDate == null && c.Ddate == null && (!languageId.HasValue || c.LanguageId == languageId))
                     .Include(c => c.PackingTypeImage)
                     .Include(c => c.ProductPackingType)
                     .Select(c => new
@@ -858,6 +858,8 @@ namespace HandCarftBaseServer.Controllers
                 packingList.Mdate = DateTime.Now.Ticks;
                 packingList.MuserId = ClaimPrincipalFactory.GetUserId(User);
 
+
+
                 var toBeDeleted = _repository.ProductPackingType
                     .FindByCondition(c => c.ProductPackingTypeListId == input.Id).ToList();
 
@@ -936,11 +938,11 @@ namespace HandCarftBaseServer.Controllers
             try
             {
                 var res = _repository.ProductPackingType.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.ProductId == productId)
-                    .Include(c=>c.PackinggType)
+                    .Include(c => c.PackinggType)
                     .Select(c => new
                     {
-                       c.PackinggType.Name,
-                      CreationDate=DateTimeFunc.TimeTickToMiladi(c.Cdate.Value)
+                        c.PackinggType.Name,
+                        CreationDate = DateTimeFunc.TimeTickToMiladi(c.Cdate.Value)
 
                     }).ToList();
 
@@ -963,12 +965,12 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("PackingType/GetPackingTypeList_UI")]
-        public ListResult<PackingTypeDto> GetPackingTypeList_UI()
+        public ListResult<PackingTypeDto> GetPackingTypeList_UI(long? languageId)
         {
 
             try
             {
-                var res = _repository.PackingType.FindByCondition(c => (c.DaDate == null) && (c.Ddate == null)).Include(c => c.PackingTypeImage).ToList();
+                var res = _repository.PackingType.FindByCondition(c => (c.DaDate == null) && (c.Ddate == null) && (!languageId.HasValue || c.LanguageId == languageId)).Include(c => c.PackingTypeImage).ToList();
                 var result = _mapper.Map<List<PackingTypeDto>>(res);
                 var finalresult = ListResult<PackingTypeDto>.GetSuccessfulResult(result);
                 return finalresult;

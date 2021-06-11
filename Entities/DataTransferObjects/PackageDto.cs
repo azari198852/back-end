@@ -7,6 +7,7 @@ namespace Entities.DataTransferObjects
     public class PackageDto
     {
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string Name { get; set; }
         public long? Price { get; set; }
         public string StartDate { get; set; }

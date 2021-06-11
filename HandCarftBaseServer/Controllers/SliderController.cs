@@ -95,6 +95,7 @@ namespace HandCarftBaseServer.Controllers
                 slider.Rorder = _slider.Rorder;
                 slider.SliderPlaceId = _slider.SliderPlaceId;
                 slider.Title = _slider.Title;
+                slider.LanguageId = _slider.LanguageId;
                 _repository.Slider.Update(slider);
 
 
@@ -125,6 +126,7 @@ namespace HandCarftBaseServer.Controllers
             slider.Rorder = _slider.Rorder;
             slider.SliderPlaceId = _slider.SliderPlaceId;
             slider.Title = _slider.Title;
+            slider.LanguageId = _slider.LanguageId;
             _repository.Slider.Update(slider);
             try
             {
@@ -195,11 +197,11 @@ namespace HandCarftBaseServer.Controllers
 
         [HttpGet]
         [Route("Slider/GetSliderList")]
-        public IActionResult GetSliderList(long sliderPlaceId)
+        public IActionResult GetSliderList(long sliderPlaceId, long? languageId)
         {
             try
             {
-                var res = _repository.Slider.FindByCondition(c => (c.Ddate == null && c.DaDate == null && (c.SliderPlaceId == sliderPlaceId || sliderPlaceId == -1))).Include(c => c.SliderPlace)
+                var res = _repository.Slider.FindByCondition(c => (c.Ddate == null && c.DaDate == null && (c.SliderPlaceId == sliderPlaceId || sliderPlaceId == -1)) && (!languageId.HasValue || c.LanguageId == languageId)).Include(c => c.SliderPlace)
                     .ToList();
                 return Ok(res);
             }
@@ -217,12 +219,12 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Slider/GetSliderByPlaceCode_UI")]
-        public ListResult<SliderDto> GetSliderByPlaceCode_UI(long sliderPlaceCode)
+        public ListResult<SliderDto> GetSliderByPlaceCode_UI(long sliderPlaceCode,long? languageId)
         {
 
             try
             {
-                var slider = _repository.Slider.FindByCondition(s => s.SliderPlace.Rkey.Equals(sliderPlaceCode) && s.SliderPlace.Ddate == null && s.DaDate == null && s.Ddate == null)
+                var slider = _repository.Slider.FindByCondition(s => s.SliderPlace.Rkey.Equals(sliderPlaceCode) && s.SliderPlace.Ddate == null && s.DaDate == null && s.Ddate == null && (!languageId.HasValue || s.LanguageId == languageId))
                     .OrderByDescending(c => c.Rorder).ToList();
                 if (slider.Count.Equals(0))
                 {

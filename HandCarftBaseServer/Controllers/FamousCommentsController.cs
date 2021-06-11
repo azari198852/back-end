@@ -122,7 +122,7 @@ namespace HandCarftBaseServer.Controllers
             {
                 var res = _repository.FamousComments.FindByCondition(c => c.DaUserId == null && c.DuserId == null)
                     .ToList();
-         
+
                 return Ok(res);
             }
             catch (Exception e)
@@ -131,7 +131,7 @@ namespace HandCarftBaseServer.Controllers
             }
         }
 
-      
+
 
         #region UI_Methods
 
@@ -141,11 +141,11 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("FamousComments/GetFamousCommentsList_UI")]
-        public ListResult<FamousCommentsDto> GetFamousCommentsList_UI()
+        public ListResult<FamousCommentsDto> GetFamousCommentsList_UI(long? languageId)
         {
             try
             {
-                var res = _repository.FamousComments.FindByCondition(c => c.DaUserId == null && c.DuserId == null)
+                var res = _repository.FamousComments.FindByCondition(c => c.DaUserId == null && c.DuserId == null && (!languageId.HasValue || c.LanguageId == languageId))
                     .ToList();
                 var result = _mapper.Map<List<FamousCommentsDto>>(res);
 

@@ -6,6 +6,7 @@ namespace Entities.Models
     public partial class FamousComments
     {
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string ProfilePic { get; set; }
         public string Name { get; set; }
         public string Post { get; set; }
@@ -19,5 +20,7 @@ namespace Entities.Models
         public long? Mdate { get; set; }
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
+
+        public virtual Language Language { get; set; }
     }
 }

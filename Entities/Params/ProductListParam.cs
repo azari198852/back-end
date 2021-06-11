@@ -8,6 +8,7 @@ namespace Entities.Params
     {
 
         public long? CatProductId { get; set; }
+        public long? LanguageId { get; set; }
         public string ProductName { get; set; }
         public long? MinPrice { get; set; }
         public long? MaxPrice { get; set; }

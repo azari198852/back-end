@@ -9,6 +9,7 @@ namespace Entities.Params
         public List<long> CatProductIds { get; set; }
         public List<long> SellerIds { get; set; }
         public List<long> ProductIds { get; set; }
+        public long? LanguageId { get; set; }
         public long? FromPrice { get; set; }
         public long? ToPrice { get; set; }
     }

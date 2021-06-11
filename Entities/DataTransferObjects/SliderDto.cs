@@ -9,6 +9,7 @@ namespace Entities.DataTransferObjects
     {
         public long Id { get; set; }
         public long? SliderPlaceId { get; set; }
+        public long? LanguageId { get; set; }
         public string Title { get; set; }
         public string ImageUrl { get; set; }
         public string ImageHurl { get; set; }

@@ -8,6 +8,7 @@ namespace Entities.DataTransferObjects
    public class PackingTypeDto
     {
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string Name { get; set; }
         public long? Price { get; set; }
         public long? Weight { get; set; }

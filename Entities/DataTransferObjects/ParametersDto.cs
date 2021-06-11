@@ -8,6 +8,7 @@ namespace Entities.DataTransferObjects
     {
         public long Id { get; set; }
         public long? Pid { get; set; }
+        public long? LanguageId { get; set; }
         public string Name { get; set; }
         public long? Rkey { get; set; }
     }

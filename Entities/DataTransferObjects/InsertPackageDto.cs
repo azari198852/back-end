@@ -10,6 +10,7 @@ namespace Entities.DataTransferObjects
     public class InsertPackageDto
     {
         public long? PackageId { get; set; }
+        public long? LanguageId { get; set; }
         public string Name { get; set; }
         public long Price { get; set; }
         public string KeyWord { get; set; }

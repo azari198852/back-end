@@ -126,12 +126,12 @@ namespace HandCarftBaseServer.Controllers
 
         [HttpGet]
         [Route("Parameters/GetParametersList")]
-        public IActionResult GetParametersList()
+        public IActionResult GetParametersList(long? languageId)
         {
 
             try
             {
-                var list = _repository.Parameter.FindByCondition(c => c.DaDate == null && c.Ddate == null).ToList();
+                var list = _repository.Parameter.FindByCondition(c => c.DaDate == null && c.Ddate == null && (!languageId.HasValue || c.LanguageId == languageId)).ToList();
                 var fatherlist = list.Where(c => c.Pid == null).ToList();
 
 
@@ -156,7 +156,7 @@ namespace HandCarftBaseServer.Controllers
             {
                 return BadRequest("");
             }
-            
+
 
         }
 

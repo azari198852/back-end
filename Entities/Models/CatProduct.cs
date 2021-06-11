@@ -16,6 +16,7 @@ namespace Entities.Models
         }
 
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public long? Pid { get; set; }
         public string Name { get; set; }
         public long? Coding { get; set; }
@@ -34,6 +35,8 @@ namespace Entities.Models
         public long? Mdate { get; set; }
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
+
+        public virtual Language Language { get; set; }
         [JsonIgnore]
         public virtual CatProduct P { get; set; }
         public virtual ICollection<CatProductLanguage> CatProductLanguage { get; set; }

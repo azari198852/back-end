@@ -3,7 +3,6 @@ using System.Collections.Generic;
 
 namespace Entities.Models
 {
-
     public partial class PackingType
     {
         public PackingType()
@@ -14,6 +13,7 @@ namespace Entities.Models
         }
 
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string Name { get; set; }
         public long? Price { get; set; }
         public long? Weight { get; set; }
@@ -30,9 +30,9 @@ namespace Entities.Models
         public long? DaDate { get; set; }
 
         public virtual Color Color { get; set; }
+        public virtual Language Language { get; set; }
         public virtual ICollection<CustomerOrderProduct> CustomerOrderProduct { get; set; }
         public virtual ICollection<PackingTypeImage> PackingTypeImage { get; set; }
         public virtual ICollection<ProductPackingType> ProductPackingType { get; set; }
     }
-
 }

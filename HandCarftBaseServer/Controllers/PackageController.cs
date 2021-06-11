@@ -43,7 +43,7 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("GetPackageList_UI")]
-        public ListResult<PackageDto> GetPackageList_UI()
+        public ListResult<PackageDto> GetPackageList_UI(long? languageId)
         {
             try
             {
@@ -51,7 +51,7 @@ namespace HandCarftBaseServer.Controllers
                 var time = DateTime.Now.Ticks;
                 var res = _repository.Package
                     .FindByCondition(c =>
-                        c.DaDate == null && c.Ddate == null && c.StartDateTime < time && time < c.EndDateTime)
+                        c.DaDate == null && c.Ddate == null && c.StartDateTime < time && time < c.EndDateTime && (!languageId.HasValue || c.LanguageId == languageId))
                     .Include(c => c.PackageImage).ToList();
                 var result = _mapper.Map<List<PackageDto>>(res);
 
@@ -106,7 +106,7 @@ namespace HandCarftBaseServer.Controllers
             }
         }
 
-       // [Authorize]
+        // [Authorize]
         [HttpPost]
         [Route("InsertPackage")]
         public IActionResult InsertPackage([FromForm] InsertPackageDto input, [FromForm] FormFileCollection fileList)
@@ -254,6 +254,7 @@ namespace HandCarftBaseServer.Controllers
                 product.KeyWords = input.KeyWord;
                 product.MetaTitle = input.MetaTitle;
                 product.Mdate = DateTime.Now.Ticks;
+                product.LanguageId = input.LanguageId;
                 product.MuserId = ClaimPrincipalFactory.GetUserId(User);
 
 
@@ -333,13 +334,13 @@ namespace HandCarftBaseServer.Controllers
 
         [HttpGet]
         [Route("GetPackageList")]
-        public IActionResult GetPackageList()
+        public IActionResult GetPackageList(long? languageId)
         {
             try
             {
 
                 var res = _repository.Product
-                    .FindByCondition(c => c.Ddate == null && c.DaDate == null && c.IsPackage == true).Select(
+                    .FindByCondition(c => c.Ddate == null && c.DaDate == null && c.IsPackage == true && (!languageId.HasValue || c.LanguageId == languageId)).Select(
                         c => new { c.Id, c.Name, c.Price, c.Coding }).OrderByDescending(c => c.Id).ToList();
 
                 _logger.LogData(MethodBase.GetCurrentMethod(), res, null);

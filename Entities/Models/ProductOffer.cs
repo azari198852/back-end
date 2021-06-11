@@ -6,6 +6,7 @@ namespace Entities.Models
     public partial class ProductOffer
     {
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public long? OfferId { get; set; }
         public long? ProductId { get; set; }
         public long? FromDate { get; set; }

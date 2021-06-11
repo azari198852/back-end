@@ -191,6 +191,7 @@ namespace HandCarftBaseServer.Controllers
                 _dynamicForms.Title = dynamicForms.Title;
                 _dynamicForms.TitleMetaData = dynamicForms.TitleMetaData;
                 _dynamicForms.KeyWords = dynamicForms.KeyWords;
+                _dynamicForms.LanguageId = dynamicForms.LanguageId;
                 
 
 

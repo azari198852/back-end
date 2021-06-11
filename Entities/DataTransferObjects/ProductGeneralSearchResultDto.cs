@@ -7,6 +7,7 @@ namespace Entities.DataTransferObjects
    public class ProductGeneralSearchResultDto
     {
         public long ProductId { get; set; }
+        public long? LanguageId { get; set; }
         public string ProductName { get; set; }
         public long CatProductId { get; set; }
         public long CatProductCode { get; set; }

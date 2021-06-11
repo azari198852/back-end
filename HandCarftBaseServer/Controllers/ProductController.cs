@@ -41,11 +41,11 @@ namespace HandCarftBaseServer.Controllers
 
         [HttpGet]
         [Route("Product/GetProductList")]
-        public IActionResult GetProductList()
+        public IActionResult GetProductList(long? languageId)
         {
             try
             {
-                return Ok(_repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null)
+                return Ok(_repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null &&(!languageId.HasValue || c.LanguageId==languageId))
                     .Include(c => c.CatProduct)
                     .Include(c => c.Seller)
                     .Select(c => new
@@ -460,7 +460,8 @@ namespace HandCarftBaseServer.Controllers
                                                                       (filter.SellerIds.Contains(c.SellerId.Value) || filter.SellerIds.Count == 0) &&
                                                                       (filter.ProductIds.Contains(c.Id) || filter.ProductIds.Count == 0) &&
                                                                       (filter.FromPrice <= c.Price || filter.FromPrice == null) &&
-                                                                      (filter.ToPrice >= c.Price || filter.ToPrice == null))
+                                                                      (filter.ToPrice >= c.Price || filter.ToPrice == null)
+                                                                      && (!filter.LanguageId.HasValue || c.LanguageId == filter.LanguageId))
                                                                       .Include(c => c.CatProduct).Include(c => c.Seller).Include(c => c.ProductOffer)
                                                                       .Select(c => new { c.Id, c.Name, c.Coding, c.Count, CatProduct = c.CatProduct.Name, Seller = c.Seller.Name + " " + c.Seller.Fname, c.Price, OfferCount = c.ProductOffer.Count })
                                                                       .OrderByDescending(c => c.Id).AsNoTracking().ToList();
@@ -480,11 +481,11 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductListFilter_Name")]
-        public IActionResult GetProductListFilter_Name(string productName)
+        public IActionResult GetProductListFilter_Name(string productName, long? languageId)
         {
             try
             {
-                var result = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && (c.Name.Contains(productName) || string.IsNullOrWhiteSpace(productName))).Select(c => new { c.Id, c.Name, }).ToList();
+                var result = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && (c.Name.Contains(productName) || string.IsNullOrWhiteSpace(productName)) && (!languageId.HasValue || c.LanguageId == languageId)).Select(c => new { c.Id, c.Name, }).ToList();
                 _logger.LogData(MethodBase.GetCurrentMethod(), result, null, productName);
                 return Ok(result);
             }
@@ -548,7 +549,8 @@ namespace HandCarftBaseServer.Controllers
                                         (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
-                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
+                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0)
+                                        && (!filter.LanguageId.HasValue || c.LanguageId == filter.LanguageId))
                             .OrderByDescending(c => c.ProductCustomerRate.Average(x => x.Rate)).ToList();
                         MinPrice = res.Min(c => c.Price);
                         MaxPrice = res.Max(c => c.Price);
@@ -562,7 +564,8 @@ namespace HandCarftBaseServer.Controllers
                                         (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
-                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
+                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0)
+                                        && (!filter.LanguageId.HasValue || c.LanguageId == filter.LanguageId))
                             .OrderByDescending(c => c.CustomerOrderProduct.Count()).ToList();
                         MinPrice = res.Min(c => c.Price);
                         MaxPrice = res.Max(c => c.Price);
@@ -576,7 +579,8 @@ namespace HandCarftBaseServer.Controllers
                                         (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
-                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
+                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0)
+                                        && (!filter.LanguageId.HasValue || c.LanguageId == filter.LanguageId))
                             .OrderBy(c => c.Price).ToList();
                         MinPrice = res.Min(c => c.Price);
                         MaxPrice = res.Max(c => c.Price);
@@ -590,7 +594,8 @@ namespace HandCarftBaseServer.Controllers
                                         (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
-                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
+                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0)
+                                        && (!filter.LanguageId.HasValue || c.LanguageId == filter.LanguageId))
                             .OrderByDescending(c => c.Price).ToList();
                         MinPrice = res.Min(c => c.Price);
                         MaxPrice = res.Max(c => c.Price);
@@ -605,7 +610,8 @@ namespace HandCarftBaseServer.Controllers
                                         (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
-                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
+                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0)
+                                        && (!filter.LanguageId.HasValue || c.LanguageId == filter.LanguageId))
                             .OrderByDescending(c => c.Cdate).ToList();
                         MinPrice = res.Min(c => c.Price);
                         MaxPrice = res.Max(c => c.Price);
@@ -619,7 +625,8 @@ namespace HandCarftBaseServer.Controllers
                                         (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
-                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
+                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0)
+                                        && (!filter.LanguageId.HasValue || c.LanguageId == filter.LanguageId))
                             .OrderByDescending(c => c.Cdate).ToList();
                         MinPrice = res.Min(c => c.Price);
                         MaxPrice = res.Max(c => c.Price);
@@ -632,7 +639,8 @@ namespace HandCarftBaseServer.Controllers
                                         (c.CatProductId == filter.CatProductId || c.CatProduct.Pid == filter.CatProductId || filter.CatProductId == null) &&
                                         (filter.MinPrice <= c.Price || filter.MinPrice == null) &&
                                         (c.Price <= filter.MaxPrice || filter.MaxPrice == null) &&
-                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0))
+                                        (filter.SellerIdList.Contains(c.SellerId.Value) || filter.SellerIdList.Count == 0)
+                                        && (!filter.LanguageId.HasValue || c.LanguageId == filter.LanguageId))
                              .OrderByDescending(c => c.Cdate).ToList();
                         MinPrice = res.Min(c => c.Price);
                         MaxPrice = res.Max(c => c.Price);
@@ -670,13 +678,13 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductList_HaveUnescoCode_UI")]
-        public ListResult<ProductDto> GetProductList_HaveUnescoCode_UI()
+        public ListResult<ProductDto> GetProductList_HaveUnescoCode_UI(long? languageId)
         {
             try
             {
 
 
-                var res = _repository.Product.GetProductListFullInfo().Where(c => c.UnescoFlag == true)
+                var res = _repository.Product.GetProductListFullInfo().Where(c => c.UnescoFlag == true && (!languageId.HasValue || c.LanguageId == languageId))
                     .OrderByDescending(c => c.Cdate).Take(10).ToList();
                 var result = _mapper.Map<List<ProductDto>>(res);
 
@@ -698,13 +706,13 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductList_HaveMelliCode_UI")]
-        public ListResult<ProductDto> GetProductList_HaveMelliCode_UI()
+        public ListResult<ProductDto> GetProductList_HaveMelliCode_UI(long? languageId)
         {
             try
             {
 
 
-                var res = _repository.Product.GetProductListFullInfo().Where(c => c.MelliFlag == true)
+                var res = _repository.Product.GetProductListFullInfo().Where(c => c.MelliFlag == true && (!languageId.HasValue || c.LanguageId == languageId))
                     .OrderByDescending(c => c.Cdate).Take(10).ToList();
                 var result = _mapper.Map<List<ProductDto>>(res);
 
@@ -726,12 +734,12 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductList_latest_UI")]
-        public ListResult<ProductDto> GetProductList_latest_UI()
+        public ListResult<ProductDto> GetProductList_latest_UI(long? languageId)
         {
             try
             {
 
-                var res = _repository.Product.GetProductListFullInfo().OrderByDescending(c => c.Cdate).Take(10).ToList();
+                var res = _repository.Product.GetProductListFullInfo().Where(c=> (!languageId.HasValue || c.LanguageId == languageId)).OrderByDescending(c => c.Cdate).Take(10).ToList();
                 var result = _mapper.Map<List<ProductDto>>(res);
 
                 var finalresult = ListResult<ProductDto>.GetSuccessfulResult(result);
@@ -863,12 +871,12 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductListByCatId_UI")]
-        public ListResult<ProductDto> GetProductListByCatId_UI(long catProductId)
+        public ListResult<ProductDto> GetProductListByCatId_UI(long catProductId, long? languageId)
         {
             try
             {
 
-                var res = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8)
+                var res = _repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8 && (!languageId.HasValue || c.LanguageId == languageId))
                     .Include(c => c.CatProduct)
                     .Include(c => c.FinalStatus)
                     .Include(c => c.Seller)
@@ -897,12 +905,12 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductList_LastSeen_UI")]
-        public ListResult<ProductDto> GetProductList_LastSeen_UI()
+        public ListResult<ProductDto> GetProductList_LastSeen_UI(long? languageId)
         {
             try
             {
 
-                var res = _repository.Product.GetProductListFullInfo().OrderByDescending(c => c.SeenCount).Take(10)
+                var res = _repository.Product.GetProductListFullInfo().Where(c=> (!languageId.HasValue || c.LanguageId == languageId)).OrderByDescending(c => c.SeenCount).Take(10)
                     .ToList();
 
                 var result = _mapper.Map<List<ProductDto>>(res);
@@ -1059,7 +1067,7 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductList_HaveMostOffer")]
-        public ListResult<ProductDto> GetProductList_HaveMostOffer()
+        public ListResult<ProductDto> GetProductList_HaveMostOffer(long? languageId)
         {
             try
             {
@@ -1068,7 +1076,7 @@ namespace HandCarftBaseServer.Controllers
                 var productList = _repository.Product
                     .FindByCondition(c =>
                         c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8 &&
-                        c.ProductOffer.Any(x => x.FromDate < time && time < x.ToDate)).Include(c => c.ProductOffer)
+                        c.ProductOffer.Any(x => x.FromDate < time && time < x.ToDate) && (!languageId.HasValue || c.LanguageId == languageId)).Include(c => c.ProductOffer)
                     .Select(c => new
                     {
                         c.Id,
@@ -1098,12 +1106,12 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductList_special_UI")]
-        public ListResult<ProductDto> GetProductList_special_UI()
+        public ListResult<ProductDto> GetProductList_special_UI(long? languageId)
         {
             try
             {
 
-                var res = _repository.Product.GetProductListFullInfo().Where(c => c.CatProductId == 20).OrderBy(c => Guid.NewGuid()).Take(10)
+                var res = _repository.Product.GetProductListFullInfo().Where(c => c.CatProductId == 20 && (!languageId.HasValue || c.LanguageId == languageId)).OrderBy(c => Guid.NewGuid()).Take(10)
                     .ToList();
 
                 var result = _mapper.Map<List<ProductDto>>(res);
@@ -1126,7 +1134,7 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("Product/GetProductList_HaveOfferTimer")]
-        public ListResult<ProductDto> GetProductList_HaveOfferTimer()
+        public ListResult<ProductDto> GetProductList_HaveOfferTimer(long? languageId)
         {
             try
             {
@@ -1135,7 +1143,7 @@ namespace HandCarftBaseServer.Controllers
                 var productList = _repository.Product
                     .FindByCondition(c =>
                         c.Ddate == null && c.DaDate == null && c.FinalStatusId == 8 &&
-                        c.ProductOffer.Any(x => x.FromDate < time && time < x.ToDate && x.Offer.HaveTimer == true)).Include(c => c.ProductOffer).ThenInclude(c => c.Offer)
+                        c.ProductOffer.Any(x => x.FromDate < time && time < x.ToDate && x.Offer.HaveTimer == true) && (!languageId.HasValue || c.LanguageId == languageId)).Include(c => c.ProductOffer).ThenInclude(c => c.Offer)
                     .Select(c => new
                     {
                         c.Id,
@@ -1167,15 +1175,15 @@ namespace HandCarftBaseServer.Controllers
         [Authorize]
         [HttpGet]
         [Route("Product/GetSellerProductList")]
-        public IActionResult GetSellerProductList()
+        public IActionResult GetSellerProductList(long? languageId)
         {
             try
             {
                 var userid = ClaimPrincipalFactory.GetUserId(User);
                 var seller = _repository.Seller.FindByCondition(c => c.UserId == userid).FirstOrDefault();
                 if (seller == null) return Unauthorized();
-                return Ok(_repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.SellerId == seller.Id &&
-                                                              ((c.FinalStatusId == 7) || (c.FinalStatusId == 8) || (c.FinalStatusId == 9) || (c.FinalStatusId == 10) || (c.FinalStatusId == 11)))
+                return Ok(_repository.Product.FindByCondition(c => c.Ddate == null && c.DaDate == null && c.SellerId == seller.Id && 
+                                                              ((c.FinalStatusId == 7) || (c.FinalStatusId == 8) || (c.FinalStatusId == 9) || (c.FinalStatusId == 10) || (c.FinalStatusId == 11)) && (!languageId.HasValue || c.LanguageId == languageId))
                     .Include(c => c.CatProduct)
                     .Include(c => c.FinalStatus)
                     .Select(c => new

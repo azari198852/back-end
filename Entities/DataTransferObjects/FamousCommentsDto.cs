@@ -7,6 +7,7 @@ namespace Entities.DataTransferObjects
     public class FamousCommentsDto
     {
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string ProfilePic { get; set; }
         public string Name { get; set; }
         public string Post { get; set; }

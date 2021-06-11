@@ -13,6 +13,7 @@ namespace Entities.Models
         }
 
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public long? Pid { get; set; }
         public string Name { get; set; }
         public long? Rkey { get; set; }
@@ -24,6 +25,8 @@ namespace Entities.Models
         public long? Mdate { get; set; }
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
+
+        public virtual Language Language { get; set; }
         [JsonIgnore]
         public virtual Parameters P { get; set; }
         public virtual ICollection<CatProductParameters> CatProductParameters { get; set; }

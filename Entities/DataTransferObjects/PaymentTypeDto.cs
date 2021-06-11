@@ -7,6 +7,7 @@ namespace Entities.DataTransferObjects
     public class PaymentTypeDto
     {
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public long? Rkey { get; set; }

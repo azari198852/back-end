@@ -12,6 +12,7 @@ namespace Entities.DataTransferObjects
         public string DescriptionMeta { get; set; }
         public string Description { get; set; }
         public string KeyWords { get; set; }
-       public List<DynamiFormImageDto> ImageList { get; set; }
+        public long? LanguageId { get; set; }
+        public List<DynamiFormImageDto> ImageList { get; set; }
     }
 }

@@ -274,7 +274,8 @@ namespace HandCarftBaseServer.Controllers
                         ProductId = c,
                         Value = offerInsert.Value,
                         FromDate = offerInsert.FromDate?.Ticks ?? 0,
-                        ToDate = offerInsert.ToDate?.Ticks ?? 0
+                        ToDate = offerInsert.ToDate?.Ticks ?? 0,
+                        LanguageId = offerInsert.LanguageId
                     };
                     offer.ProductOffer.Add(productOffer);
                 });
@@ -346,7 +347,8 @@ namespace HandCarftBaseServer.Controllers
                         ProductId = c,
                         Value = offerInsert.Value,
                         FromDate = offerInsert.FromDate?.Ticks ?? 0,
-                        ToDate = offerInsert.ToDate?.Ticks ?? 0
+                        ToDate = offerInsert.ToDate?.Ticks ?? 0,
+                        LanguageId = offerInsert.LanguageId
                     };
                     offer.ProductOffer.Add(productOffer);
                 });

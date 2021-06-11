@@ -12,6 +12,7 @@ namespace Entities.Models
         }
 
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public long? Rkey { get; set; }
@@ -25,6 +26,7 @@ namespace Entities.Models
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
 
+        public virtual Language Language { get; set; }
         public virtual ICollection<CustomerOrder> CustomerOrder { get; set; }
         public virtual ICollection<PaymentTypeLocation> PaymentTypeLocation { get; set; }
     }

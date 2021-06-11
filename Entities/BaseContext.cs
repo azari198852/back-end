@@ -100,11 +100,7 @@ namespace Entities
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            if (!optionsBuilder.IsConfigured)
-            {
-#warning To protect potentially sensitive information in your connection string, you should move it out of source code. See http://go.microsoft.com/fwlink/?LinkId=723263 for guidance on storing connection strings.
-                optionsBuilder.UseSqlServer("Data Source=185.192.112.67;Initial Catalog=tabrizhandicrafts_test_;User ID=Tabrizhandicraft;Password=Tabriz123@;MultipleActiveResultSets=true");
-            }
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -269,6 +265,8 @@ namespace Entities
 
                 entity.Property(e => e.KeyWords).HasMaxLength(2048);
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MetaDescription).HasMaxLength(2048);
@@ -288,6 +286,11 @@ namespace Entities
                 entity.Property(e => e.Url)
                     .HasColumnName("URL")
                     .HasMaxLength(256);
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.CatProduct)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_CatProduct_Language");
 
                 entity.HasOne(d => d.P)
                     .WithMany(p => p.InverseP)
@@ -1147,6 +1150,8 @@ namespace Entities
 
                 entity.Property(e => e.KeyWords).HasMaxLength(2048);
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
@@ -1154,6 +1159,11 @@ namespace Entities
                 entity.Property(e => e.Title).HasMaxLength(512);
 
                 entity.Property(e => e.TitleMetaData).HasMaxLength(2048);
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.DynamicForms)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_DynamicForms_Language");
             });
 
             modelBuilder.Entity<Employee>(entity =>
@@ -1190,6 +1200,8 @@ namespace Entities
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
@@ -1199,6 +1211,11 @@ namespace Entities
                 entity.Property(e => e.Post).HasMaxLength(64);
 
                 entity.Property(e => e.ProfilePic).HasMaxLength(512);
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.FamousComments)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_FamousComments_Language");
             });
 
             modelBuilder.Entity<Forms>(entity =>
@@ -1464,6 +1481,8 @@ namespace Entities
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
@@ -1473,6 +1492,11 @@ namespace Entities
                 entity.Property(e => e.PackageImageUrl)
                     .HasColumnName("PackageImageURL")
                     .HasMaxLength(512);
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.Package)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_Package_Language");
             });
 
             modelBuilder.Entity<PackageImage>(entity =>
@@ -1563,6 +1587,8 @@ namespace Entities
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.Material).HasMaxLength(128);
 
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
@@ -1575,6 +1601,11 @@ namespace Entities
                     .WithMany(p => p.PackingType)
                     .HasForeignKey(d => d.ColorId)
                     .HasConstraintName("FK_PackingType_Color");
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.PackingType)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_PackingType_Language");
             });
 
             modelBuilder.Entity<PackingTypeImage>(entity =>
@@ -1633,6 +1664,8 @@ namespace Entities
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
@@ -1640,6 +1673,11 @@ namespace Entities
                 entity.Property(e => e.Name).HasMaxLength(512);
 
                 entity.Property(e => e.Pid).HasColumnName("PID");
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.Parameters)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_Parameters_Language");
 
                 entity.HasOne(d => d.P)
                     .WithMany(p => p.InverseP)
@@ -1667,11 +1705,18 @@ namespace Entities
 
                 entity.Property(e => e.Icon).HasMaxLength(512);
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MuserId).HasColumnName("MUserID");
 
                 entity.Property(e => e.Title).HasMaxLength(50);
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.PaymentType)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_PaymentType_Language");
             });
 
             modelBuilder.Entity<PaymentTypeLocation>(entity =>
@@ -1793,6 +1838,8 @@ namespace Entities
 
                 entity.Property(e => e.KeyWords).HasMaxLength(2048);
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
                 entity.Property(e => e.MetaDescription).HasMaxLength(2048);
@@ -1816,6 +1863,11 @@ namespace Entities
                     .WithMany(p => p.Product)
                     .HasForeignKey(d => d.FinalStatusId)
                     .HasConstraintName("FK_Product_Status");
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.Product)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_Product_Language");
 
                 entity.HasOne(d => d.Seller)
                     .WithMany(p => p.Product)
@@ -2167,6 +2219,8 @@ namespace Entities
                 entity.Property(e => e.Ddate).HasColumnName("DDate");
 
                 entity.Property(e => e.DuserId).HasColumnName("DUserID");
+
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
 
                 entity.Property(e => e.Mdate).HasColumnName("MDate");
 
@@ -2820,6 +2874,8 @@ namespace Entities
                     .HasColumnName("ImageURL")
                     .HasMaxLength(512);
 
+                entity.Property(e => e.LanguageId).HasColumnName("LanguageID");
+
                 entity.Property(e => e.LinkUrl)
                     .HasColumnName("LinkURL")
                     .HasMaxLength(256);
@@ -2833,6 +2889,11 @@ namespace Entities
                 entity.Property(e => e.SliderPlaceId).HasColumnName("SliderPlaceID");
 
                 entity.Property(e => e.Title).HasMaxLength(512);
+
+                entity.HasOne(d => d.Language)
+                    .WithMany(p => p.Slider)
+                    .HasForeignKey(d => d.LanguageId)
+                    .HasConstraintName("FK_Slider_Language");
 
                 entity.HasOne(d => d.SliderPlace)
                     .WithMany(p => p.Slider)

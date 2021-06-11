@@ -8,6 +8,7 @@ namespace Entities.DataTransferObjects
     {
         public long Id { get; set; }
         public long? OfferTypeId { get; set; }
+        public long? LanguageId { get; set; }
         public string Name { get; set; }
         public DateTime? FromDate { get; set; }
         public DateTime? ToDate { get; set; }

@@ -12,6 +12,7 @@ namespace Entities.Models
         }
 
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public string Name { get; set; }
         public long? Price { get; set; }
         public long? StartDateTime { get; set; }
@@ -29,6 +30,7 @@ namespace Entities.Models
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
 
+        public virtual Language Language { get; set; }
         public virtual ICollection<PackageImage> PackageImage { get; set; }
         public virtual ICollection<PackageProduct> PackageProduct { get; set; }
     }

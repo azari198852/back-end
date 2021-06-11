@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
+
+
 namespace Entities.Models
 {
     public partial class Product
     {
         public Product()
         {
-            CustomerOrderProduct = new HashSet<CustomerOrderProduct>();
             CustomerFavoriteProducts = new HashSet<CustomerFavoriteProducts>();
+            CustomerOrderProduct = new HashSet<CustomerOrderProduct>();
             PackageProduct = new HashSet<PackageProduct>();
             ProductCatProductParameters = new HashSet<ProductCatProductParameters>();
             ProductColor = new HashSet<ProductColor>();
@@ -24,10 +26,10 @@ namespace Entities.Models
             ProductStatusLog = new HashSet<ProductStatusLog>();
             RelatedProductDestinProduct = new HashSet<RelatedProduct>();
             RelatedProductOriginProduct = new HashSet<RelatedProduct>();
-
         }
 
         public long Id { get; set; }
+        public long? LanguageId { get; set; }
         public long? CatProductId { get; set; }
         public long? SellerId { get; set; }
         public long? ProductMeterId { get; set; }
@@ -72,9 +74,11 @@ namespace Entities.Models
         public long? Mdate { get; set; }
         public long? DaUserId { get; set; }
         public long? DaDate { get; set; }
+
         [JsonIgnore]
         public virtual CatProduct CatProduct { get; set; }
         public virtual Status FinalStatus { get; set; }
+        public virtual Language Language { get; set; }
         public virtual Seller Seller { get; set; }
         public virtual ICollection<CustomerFavoriteProducts> CustomerFavoriteProducts { get; set; }
         public virtual ICollection<CustomerOrderProduct> CustomerOrderProduct { get; set; }

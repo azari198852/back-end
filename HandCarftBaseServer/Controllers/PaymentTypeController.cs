@@ -29,12 +29,12 @@ namespace HandCarftBaseServer.Controllers
         /// </summary>
         [HttpGet]
         [Route("PaymentType/GetPaymentTypeList_UI")]
-        public ListResult<PaymentTypeDto> GetPaymentTypeList_UI()
+        public ListResult<PaymentTypeDto> GetPaymentTypeList_UI(long? languageId)
         {
 
             try
             {
-                var res = _repository.PaymentType.FindByCondition(c => c.Ddate == null && c.DaDate == null).ToList();
+                var res = _repository.PaymentType.FindByCondition(c => c.Ddate == null && c.DaDate == null && (!languageId.HasValue || c.LanguageId == languageId)).ToList();
                 var result = _mapper.Map<List<PaymentTypeDto>>(res);
                 var finalresult = ListResult<PaymentTypeDto>.GetSuccessfulResult(result);
                 return finalresult;
